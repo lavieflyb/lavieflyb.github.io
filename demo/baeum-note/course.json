@@ -1,0 +1,269 @@
+{
+ "courses": [
+  {
+   "id": "sf",
+   "name": "숏폼 과정 (예시)",
+   "meta": {
+    "title": "숏폼 과정 복습 (예시)",
+    "short": "숏폼 · 복습",
+    "school": "예시 강의실 · 강사 A",
+    "code": "체험판",
+    "cohort": "2026 가을",
+    "when": "온라인 강의 + 회차별 자료",
+    "updated": "2026-11-21"
+   },
+   "intro": "회차별 강의, 과제, 실습을 한 화면에서 보는 복습 노트예요. 회차를 누르면 영상 몇 분 몇 초에 무슨 내용이 나오는지 볼 수 있어요.",
+   "pending": "- 3회차 자료가 어느 영상과 짝인지 확인하기\n- 복습 노트를 회차마다 한 장씩 채우기",
+   "notesDir": "내 기록/배움/숏폼 과정/강의복습",
+   "origDir": "숏폼 과정/원본 자료",
+   "sessions": [
+    {
+     "id": "S1",
+     "title": "1회차 · 숏폼의 구조",
+     "date": "2026-09-20",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "✓",
+     "feedback": "✓",
+     "task": "내 계정 분석",
+     "goals": "숏폼이 어떻게 짜여 있는지 큰 흐름을 본다.",
+     "folder": null,
+     "docs": [
+      {
+       "name": "S1 수업 메모",
+       "path": "demo/S1 수업 메모.md",
+       "kind": "transcript",
+       "source": "note",
+       "chars": 84,
+       "text": "# 수업 메모 (예시)\n\n- 첫 3초에 **누구에게** 하는 말인지 보이게\n- 자막은 한 화면에 한 문장\n- 끝에 부탁은 하나만 (댓글 또는 팔로우)\n"
+      },
+      {
+       "name": "S1 복습",
+       "path": "demo/S1 복습.md",
+       "kind": "review",
+       "source": "note",
+       "chars": 90,
+       "text": "# 복습 (예시)\n\n## 기억할 것\n1. 첫 장면은 결과부터\n2. 자막은 소리 없이도 읽히게\n\n## 내 영상에 적용\n- 다음 영상 첫 문장을 질문으로 바꿔 보기\n"
+      }
+     ],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "S2",
+     "title": "2회차 · 첫 3초와 자막",
+     "date": "2026-10-04",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "✓",
+     "feedback": "—",
+     "task": "첫 장면 두 가지로 찍어 보기",
+     "goals": "첫 3초, 자막, 끝맺음을 예시와 함께 본다.",
+     "folder": null,
+     "docs": [
+      {
+       "name": "S2 영상 목차 (전사)",
+       "path": "demo/S2 영상 목차 (전사).md",
+       "kind": "transcript",
+       "source": "note",
+       "chars": 447,
+       "text": "# S2 영상 목차 (예시)\n\n## (1) · 18:40\n| 영상 시각 | 녹화 시각 | 주제 | 내용 | 자료 |\n|---|---|---|---|---|\n| 0:00 | 0:12 | 들어가며 | 오늘 다룰 세 가지: 첫 3초, 자막, 끝맺음 | |\n| 4:30 | 4:42 | 첫 3초 | 질문으로 시작하기, 결과 먼저 보여 주기 | |\n| 11:05 | 11:17 | 예시 비교 | 같은 내용을 두 가지 첫 장면으로 찍어 비교 | |\n\n## (2) · 22:10\n| 영상 시각 | 녹화 시각 | 주제 | 내용 | 자료 |\n|---|---|---|---|---|\n| 0:00 | 18:52 | 자막 | 소리 없이 봐도 이해되게, 한 화면 한 문장 | |\n| 9:20 | 28:12 | 끝맺음 | 마지막에 할 일은 하나만 | |\n| 16:45 | 35:37 | 정리 | 다음 회차 과제 안내 | |\n"
+      }
+     ],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "S3",
+     "title": "3회차 · 편집 리듬",
+     "date": "2026-10-18",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "—",
+     "feedback": "—",
+     "task": "30초 영상 편집",
+     "goals": "컷 길이와 음악으로 리듬을 만든다.",
+     "folder": null,
+     "docs": [],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "S4",
+     "title": "4회차 · 계정 운영",
+     "date": "2026-12-06",
+     "lecturer": "강사 A",
+     "watched": "—",
+     "homework": "—",
+     "feedback": "—",
+     "task": "—",
+     "goals": "올리는 주기와 댓글 응대를 정한다.",
+     "folder": null,
+     "docs": [],
+     "readings": [],
+     "missing": []
+    }
+   ],
+   "practice": [
+    {
+     "id": "P1",
+     "title": "내 계정 분석표",
+     "date": "2026-09-27",
+     "status": "완료",
+     "session": "S1",
+     "next": "—",
+     "note": "지난 30개 영상의 첫 장면을 표로 정리했다.",
+     "docs": [],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "P2",
+     "title": "첫 장면 비교 영상 2편",
+     "date": "2026-10-10",
+     "status": "게시",
+     "session": "S2",
+     "next": "—",
+     "note": "질문형과 결과형 첫 장면을 비교했다.",
+     "docs": [],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "P3",
+     "title": "30초 영상 편집",
+     "date": "2026-10-25",
+     "status": "진행 중",
+     "session": "S3",
+     "next": "자막 타이밍 맞추기",
+     "note": "컷 길이를 2초 안팎으로 맞추는 중.",
+     "docs": [
+      {
+       "name": "과제 메모",
+       "path": "demo/과제 메모.md",
+       "kind": "prep",
+       "source": "note",
+       "chars": 78,
+       "text": "# 과제 메모 (예시)\n\n| 할 일 | 상태 |\n|---|---|\n| 대본 초안 | 완료 |\n| 촬영 | 진행 중 |\n| 편집 | 예정 |\n"
+      }
+     ],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "P4",
+     "title": "다음 달 업로드 계획",
+     "date": "2026-11-30",
+     "status": "예정",
+     "session": "S4",
+     "next": "주제 10개 고르기",
+     "note": "4회차 전에 초안을 만든다.",
+     "docs": [],
+     "readings": [],
+     "missing": []
+    }
+   ]
+  },
+  {
+   "id": "ai",
+   "name": "AI 시스템 (예시)",
+   "meta": {
+    "title": "AI 시스템 만들기 (예시)",
+    "short": "AI · 복습",
+    "school": "예시 클럽",
+    "code": "체험판",
+    "cohort": "2026 가을",
+    "when": "오프라인 모임",
+    "watch_label": "참석",
+    "updated": "2026-11-21"
+   },
+   "intro": "모임 회차와 실습을 기록해요. 다른 과정과 같은 화면에서 탭으로 바꿔 봐요.",
+   "pending": "",
+   "notesDir": "내 기록/배움/AI 시스템/강의복습",
+   "origDir": "AI 시스템/강의자료",
+   "sessions": [
+    {
+     "id": "S1",
+     "title": "1회차 · 나를 펼쳐놓기",
+     "date": "2026-10-11",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "✓",
+     "feedback": "없음",
+     "task": "내 일과 삶의 지도",
+     "goals": "내 기록을 AI가 읽을 수 있는 재료로 모은다.",
+     "folder": null,
+     "docs": [
+      {
+       "name": "S1 복습",
+       "path": "demo/S1 복습.md",
+       "kind": "review",
+       "source": "note",
+       "chars": 90,
+       "text": "# 복습 (예시)\n\n## 기억할 것\n1. 첫 장면은 결과부터\n2. 자막은 소리 없이도 읽히게\n\n## 내 영상에 적용\n- 다음 영상 첫 문장을 질문으로 바꿔 보기\n"
+      }
+     ],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "S2",
+     "title": "2회차 · 기본 지침 쓰기",
+     "date": "2026-10-25",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "✓",
+     "feedback": "없음",
+     "task": "지침 첫 버전",
+     "goals": "AI에게 나를 설명하는 지침을 쓴다.",
+     "folder": null,
+     "docs": [],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "S3",
+     "title": "3회차 · 나만의 도구",
+     "date": "2026-11-08",
+     "lecturer": "강사 A",
+     "watched": "✓",
+     "homework": "—",
+     "feedback": "없음",
+     "task": "도구 하나 만들기",
+     "goals": "매일 여는 화면을 하나 만든다.",
+     "folder": null,
+     "docs": [],
+     "readings": [],
+     "missing": []
+    }
+   ],
+   "practice": [
+    {
+     "id": "P1",
+     "title": "지침 첫 버전",
+     "date": "2026-10-26",
+     "status": "완료",
+     "session": "S2",
+     "next": "—",
+     "note": "말투와 금지할 것을 정했다.",
+     "docs": [],
+     "readings": [],
+     "missing": []
+    },
+    {
+     "id": "P2",
+     "title": "복습 노트 만들기",
+     "date": "2026-11-09",
+     "status": "진행 중",
+     "session": "S3",
+     "next": "회차별 영상 목차 붙이기",
+     "note": "지금 보고 있는 이 화면이 그 결과물이에요.",
+     "docs": [],
+     "readings": [],
+     "missing": []
+    }
+   ]
+  }
+ ],
+ "today": "2026-11-21"
+}

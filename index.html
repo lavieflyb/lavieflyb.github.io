@@ -93,8 +93,8 @@ body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-
     <a class="ic" href="ai-system.html" data-win="ai" data-title="내 AI 시스템">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#8C4A55"/><text x="32" y="40" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="20" font-weight="800" fill="#FBFAF4">AI</text></svg>
       <span>내 AI 시스템</span></a>
-    <!-- 진짜 배움 노트: 내 컴퓨터에서 볼 때만 보이는 앱 (방문자 화면에는 숨김) -->
-    <a class="ic mine" href="http://127.0.0.1:8799/" target="_blank" rel="noopener" hidden title="내 컴퓨터에서만 열려요">
+    <!-- 배움 노트: 방문자에겐 체험판, 내 컴퓨터에서 볼 때는 진짜 배움 노트(127.0.0.1:8799) -->
+    <a class="ic mine" href="demo/baeum-note/index.html" target="_blank" rel="noopener">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><rect x="12" y="16" width="40" height="32" rx="3" fill="none" stroke="#36382B" stroke-width="3"/><path d="M26 16v32" stroke="#36382B" stroke-width="3"/><path d="M31 25h14M31 31h10M31 37h12" stroke="#A9AF7C" stroke-width="3" stroke-linecap="round"/></svg>
       <span>배움 노트</span></a>
     <a class="ic" href="demo/shortform-toc/index.html" target="_blank" rel="noopener">
@@ -160,7 +160,7 @@ body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-
     win.hidden = false; shade.hidden = false; close.focus();
   };
   const shut = () => { win.hidden = true; shade.hidden = true; frame.src = "about:blank"; opener?.focus(); };
-  if (["127.0.0.1", "localhost"].includes(location.hostname)) document.querySelectorAll(".ic.mine").forEach(a => a.hidden = false);
+  if (["127.0.0.1", "localhost"].includes(location.hostname)) document.querySelectorAll(".ic.mine").forEach(a => { a.href = "http://127.0.0.1:8799/"; a.title = "진짜 배움 노트 (내 컴퓨터에서만)"; });
   document.querySelectorAll(".ic[data-win]").forEach(a => a.addEventListener("click", e => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault(); open(a);
