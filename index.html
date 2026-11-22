@@ -3,70 +3,172 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>flyb · 오늘의 나라</title>
-<meta name="description" content="서울과 다른 도시에서, 먹고 머물고 일하는 나라의 일상. 내가 고르고 머문 것들의 기록.">
+<title>flyb · NARA</title>
+<meta name="description" content="와인과 시가, 공간과 행사 곁에서 일하는 NARA가 가 본 곳과 만난 사람을 모아 두는 기록.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css?v=20261122i">
+<style>
+/* 첫 화면: 핸드폰 홈 화면처럼. 하늘색 바탕 + 시계·메모 위젯 + 앱 아이콘 + 아래 독.
+   아이콘은 화면 위에 창으로 열리고, 창 안은 archive.html 의 해당 칸만 보여 준다.
+   img/desktop.jpg 를 넣으면 바탕 사진이 된다. */
+:root{--sky1:#4F8FE6;--sky2:#86B7F2;--sky3:#D6E7FA}
+body.home{min-height:100svh;display:flex;flex-direction:column;align-items:center;color:#fff;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 55%,var(--sky3) 100%) no-repeat,var(--sky2)}
+body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-repeat}
+.status{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px max(20px,env(safe-area-inset-left,0px)) 0;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.status .logo{font-size:17px;color:#fff;font-weight:700}
+.status a{color:#fff}
+.phone{width:min(100%,440px);flex:1;display:flex;flex-direction:column;padding:18px 20px calc(18px + env(safe-area-inset-bottom,0px));gap:26px}
+/* 위젯 */
+.widgets{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wd{border-radius:22px;padding:14px 16px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 24px rgba(20,40,80,.18)}
+.wd.clock{background:rgba(255,255,255,.22);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.wd.clock .d{font-size:13px;font-weight:600;opacity:.95}
+.wd.clock .t{font-size:44px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.wd.clock .s{font-size:12px;opacity:.9}
+.wd.memo{background:#FFF6C8;color:#3B3622}
+.wd.memo .h{font-size:12px;font-weight:700;color:#B08A1E;letter-spacing:.02em}
+.wd.memo p{margin:6px 0 0;font-family:var(--serif);font-size:15px;line-height:1.5}
+/* 앱 아이콘 */
+.apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 10px}
+.ic{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:#fff;border-radius:16px;padding:2px;cursor:pointer}
+.ic[hidden]{display:none}
+.ic svg{width:64px;height:64px;border-radius:16px;box-shadow:0 6px 14px rgba(20,40,80,.22);transition:transform .15s ease}
+.ic span{font-size:11.5px;line-height:1.2;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.35);word-break:keep-all}
+.ic:hover svg,.ic:focus-visible svg{transform:scale(1.06)}
+.ic:active svg{transform:scale(.94)}
+.ic:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* 독 */
+.dock{margin-top:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:12px 14px;border-radius:30px;background:rgba(255,255,255,.28);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.dock .ic span{display:none}
+.hint{text-align:center;font-size:12px;opacity:.9;margin:-8px 0 0}
+.hint a{color:#fff}
+/* 창 */
+.win{position:fixed;z-index:5;left:50%;top:52%;transform:translate(-50%,-50%);width:min(760px,calc(100vw - 32px));height:min(78vh,720px);
+  background:var(--bg);color:var(--ink);border-radius:16px;box-shadow:0 30px 80px rgba(10,25,60,.4);display:flex;flex-direction:column;overflow:hidden}
+.win[hidden]{display:none}
+.win .tb{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--paper);font-size:13px}
+.win .tb button{all:unset;cursor:pointer;font-size:14px;color:var(--wine);padding:2px 4px}
+.win .tb button:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+.win .tb .t{flex:1;text-align:center;font-weight:600;color:var(--ink)}
+.win .tb a{font-size:12px;color:var(--muted);white-space:nowrap}
+.win iframe{flex:1;border:0;width:100%;background:var(--bg)}
+.shade{position:fixed;inset:0;z-index:4;background:rgba(10,25,60,.25)}
+.shade[hidden]{display:none}
+@media (max-width:620px){
+  .win{inset:0;left:0;top:0;transform:none;width:100%;height:100%;border-radius:0}
+  .ic svg{width:58px;height:58px;border-radius:14px}
+}
+@media (prefers-reduced-motion:reduce){.ic svg{transition:none}}
+</style>
 </head>
-<body>
-<header class="top">
-  <div class="wrap row">
-    <a class="logo" href="#">flyb</a>
-    <nav><a href="#inventory">기록</a><a href="#making">만드는 중</a><a href="ai-system.html">내 AI 시스템</a><a href="#about">소개</a></nav>
-  </div>
+<body class="home">
+<header class="status">
+  <a class="logo" href="index.html">flyb<span class="dot" style="color:#fff">.</span></a>
+  <span id="clock-s"></span>
+  <a href="archive.html">전체 보기</a>
 </header>
 
-<main>
-  <section class="hero wrap">
-    <p class="kicker">플라이비 flyb · MY OWN INVENTORY</p>
-    <h1>오늘의 나라</h1>
-    <p class="lede">서울과 다른 도시에서, 먹고 머물고 일하는 나라의 일상. 가 본 와이너리, 열었던 자리, 만난 사람을 한 장씩 모아 두는 목록이에요.</p>
+<main class="phone">
+  <section class="widgets" aria-label="위젯">
+    <div class="wd clock" aria-hidden="true"><span class="d" id="w-date"></span><span class="t" id="w-time"></span><span class="s">서울</span></div>
+    <div class="wd memo"><span class="h">메모</span><p>와인과 시가, 공간과 행사 곁에서 일해요. 가 본 곳과 만난 사람을 한 장씩 모아 둡니다.</p></div>
   </section>
 
-  <section class="wrap roles" id="about" aria-label="활동 영역">
-    <div><span class="tag">CURATOR</span><h2>경험을 고르고 엮어요</h2><p>와인과 시가, 공간과 행사. 직접 경험한 것 중에서 다시 고르고 싶은 것을 남겨요.</p></div>
-    <div><span class="tag">PD</span><h2>장면으로 보여 줘요</h2><p>숏폼과 영상으로 내가 고르고 생활하는 모습을 기록해요. 지금 배우며 만들고 있어요.</p></div>
-    <div><span class="tag">WRITER</span><h2>무엇이 나를 만들었나</h2><p>보고 먹고 머문 것들을 따라가면 한 사람이 보인다는 생각으로 책을 준비하고 있어요.</p></div>
-  </section>
+  <nav class="apps" aria-label="앱">
+    <a class="ic" href="archive.html#about" data-win="about" data-title="소개">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><circle cx="32" cy="25" r="9" fill="#8C4A55"/><path d="M15 50c3-9 10-13 17-13s14 4 17 13" fill="#8C4A55"/></svg>
+      <span>소개</span></a>
+    <a class="ic" href="archive.html#inventory" data-win="inventory" data-title="INVENTORY">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#C4C99B"/><rect x="14" y="18" width="36" height="30" rx="3" fill="#FBFAF4"/><path d="M14 26h36" stroke="#8C4A55" stroke-width="3"/><path d="M20 34h14M20 40h20" stroke="#A9AF7C" stroke-width="3" stroke-linecap="round"/></svg>
+      <span>INVENTORY</span></a>
+    <a class="ic" href="archive.html#making" data-win="making" data-title="IN PROGRESS">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#36382B"/><path d="M20 44l16-16 6 6-16 16h-6z" fill="#C4C99B"/><path d="M38 26l4-4 6 6-4 4z" fill="#E8B3BA"/></svg>
+      <span>IN PROGRESS</span></a>
+    <a class="ic" href="archive.html#career" data-win="career" data-title="지나온 일">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><path d="M20 16v34" stroke="#C4C99B" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="#8C4A55"/><circle cx="20" cy="33" r="4" fill="#8C4A55"/><circle cx="20" cy="46" r="4" fill="#8C4A55"/><path d="M29 20h16M29 33h12M29 46h14" stroke="#36382B" stroke-width="3" stroke-linecap="round"/></svg>
+      <span>지나온 일</span></a>
+    <a class="ic" href="ai-system.html" data-win="ai" data-title="내 AI 시스템">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#8C4A55"/><text x="32" y="40" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="20" font-weight="800" fill="#FBFAF4">AI</text></svg>
+      <span>내 AI 시스템</span></a>
+    <!-- 진짜 배움 노트: 내 컴퓨터에서 볼 때만 보이는 앱 (방문자 화면에는 숨김) -->
+    <a class="ic mine" href="http://127.0.0.1:8799/" target="_blank" rel="noopener" hidden title="내 컴퓨터에서만 열려요">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><rect x="12" y="16" width="40" height="32" rx="3" fill="none" stroke="#36382B" stroke-width="3"/><path d="M26 16v32" stroke="#36382B" stroke-width="3"/><path d="M31 25h14M31 31h10M31 37h12" stroke="#A9AF7C" stroke-width="3" stroke-linecap="round"/></svg>
+      <span>배움 노트</span></a>
+    <a class="ic" href="demo/shortform-toc/index.html" target="_blank" rel="noopener">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#36382B"/><rect x="12" y="16" width="40" height="26" rx="3" fill="#FBFAF4"/><path d="M28 23v12l10-6z" fill="#8C4A55"/><path d="M12 48h40" stroke="#C4C99B" stroke-width="3" stroke-linecap="round"/><circle cx="26" cy="48" r="3" fill="#E8B3BA"/></svg>
+      <span>영상 목차</span></a>
+    <a class="ic" href="demo/hr-desk/index.html" target="_blank" rel="noopener">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FFE27A"/><path d="M32 16c-10 0-18 6-18 14 0 5 3 9 8 12l-2 7 8-5c1 0 3 .2 4 .2 10 0 18-6 18-14S42 16 32 16z" fill="#36382B"/><circle cx="25" cy="30" r="2.4" fill="#FFE27A"/><circle cx="32" cy="30" r="2.4" fill="#FFE27A"/><circle cx="39" cy="30" r="2.4" fill="#FFE27A"/></svg>
+      <span>인사 창구</span></a>
+  </nav>
 
-  <section class="wrap" id="inventory">
-    <div class="sechead">
-      <h2>INVENTORY</h2>
-      <p>날짜순 기록. 한 장마다 그때 고른 이유와 남은 기준을 적어요.</p>
-    </div>
-    <div class="filters" id="filters" role="tablist" aria-label="기록 종류"></div>
-    <div class="cards" id="cards"></div>
-  </section>
+  <p class="hint">앱을 눌러 열어 보세요 · <a href="archive.html">전체 보기</a></p>
 
-  <section class="wrap" id="making">
-    <div class="sechead">
-      <h2>만드는 중</h2>
-      <p>배우면서 직접 만들고 있는 것들이에요.</p>
-    </div>
-    <div class="making">
-      <article><span class="state on">쓰는 중</span><h3>숏폼 강의 영상 목차</h3><p>함께 듣는 수강생을 위해 강의 영상 몇 분 몇 초에 무슨 내용이 나오는지 정리한 페이지. 수강생에게만 공유해요.</p></article>
-      <article><span class="state on">쓰는 중</span><h3>배움 노트</h3><p>두 과정의 강의 회차, 실습, 영상 목차를 한 화면에서 보는 내 컴퓨터용 도구.</p></article>
-      <article><span class="state">만드는 중</span><h3>인사 관리 앱</h3><p>일하는 곳에서 쓸 인사 관리 앱. 화면은 가짜 자료로 준비되면 보여 드릴게요.</p></article>
-      <article><span class="state plan">구상</span><h3>일주 다이어리</h3><p>지금 쓰는 일주별 다이어리를 앱으로. 생년월일을 넣으면 조심할 일주를 알려 주는 기능을 구상하고 있어요.</p></article>
-    </div>
-  </section>
-
-  <section class="wrap ai" aria-label="내 AI 시스템">
-    <div>
-      <p class="kicker">버킷리스트 클럽 「나만의 AI 시스템 만들기」 1기</p>
-      <h2>내 기록을 읽는 AI 비서실장</h2>
-      <p>매번 처음부터 상황을 설명하지 않으려고, 내 기록을 읽고 내 방식대로 일하는 AI를 만들었어요. 무엇을 어떻게 만들었는지 정리했어요.</p>
-    </div>
-    <a class="btn" href="ai-system.html">내 AI 시스템 보기 →</a>
-  </section>
+  <nav class="dock" aria-label="자주 쓰는 앱">
+    <a class="ic" href="https://www.instagram.com/naraflyb/" target="_blank" rel="noopener" aria-label="인스타그램 @naraflyb">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#36382B"/><rect x="16" y="16" width="32" height="32" rx="9" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="32" cy="32" r="7.5" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="42" cy="22" r="2.3" fill="#C4C99B"/></svg>
+      <span>@naraflyb</span></a>
+    <a class="ic" href="https://www.instagram.com/lavieflyb/" target="_blank" rel="noopener" aria-label="릴스 @lavieflyb">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#C4C99B"/><rect x="22" y="14" width="20" height="36" rx="4" fill="none" stroke="#36382B" stroke-width="3.5"/><path d="M29 26v12l9-6z" fill="#8C4A55"/></svg>
+      <span>@lavieflyb</span></a>
+    <a class="ic" href="https://www.instagram.com/mco.works/" target="_blank" rel="noopener" aria-label="MCO 인스타그램">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><circle cx="32" cy="32" r="22" fill="#8C4A55"/><circle cx="32" cy="32" r="17" fill="none" stroke="#E7C9CD" stroke-width="1" stroke-dasharray="2 2.4"/><text x="32" y="36.5" text-anchor="middle" font-family="'Gowun Batang',serif" font-size="12" font-weight="700" fill="#fff">MCO</text></svg>
+      <span>MCO</span></a>
+    <a class="ic" href="archive.html" aria-label="전체 보기">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><rect x="12" y="14" width="12" height="36" rx="2" fill="#C4C99B"/><rect x="26" y="14" width="12" height="36" rx="2" fill="#36382B"/><rect x="40" y="14" width="12" height="36" rx="2" fill="#8C4A55"/></svg>
+      <span>전체 보기</span></a>
+  </nav>
 </main>
 
-<footer class="wrap foot">
-  <span>© flyb · 오늘의 나라</span>
-  <span id="updated"></span>
-</footer>
+<div class="shade" id="shade" hidden></div>
+<div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="wintitle" hidden>
+  <div class="tb"><button type="button" id="winclose">닫기</button><span class="t" id="wintitle"></span><a id="winfull" href="archive.html">전체 페이지 ↗</a></div>
+  <iframe id="winframe" title="창 내용"></iframe>
+</div>
 
-<script src="app.js"></script>
+<script>
+// 바탕 사진: img/desktop.jpg 가 있을 때만
+(() => { const i = new Image(); i.onload = () => document.body.classList.add("has-photo"); i.src = "img/desktop.jpg"; })();
+
+// 시계 (상단 줄 + 위젯)
+(() => {
+  const s = document.getElementById("clock-s"), d = document.getElementById("w-date"), t = document.getElementById("w-time");
+  const tick = () => {
+    const n = new Date();
+    const hm = n.toLocaleTimeString("ko-KR", {hour:"2-digit", minute:"2-digit", hour12:false});
+    s.textContent = hm; t.textContent = hm;
+    d.textContent = n.toLocaleDateString("ko-KR", {month:"long", day:"numeric", weekday:"short"});
+  };
+  tick(); setInterval(tick, 30000);
+})();
+
+// 앱 → 창
+(() => {
+  const win = document.getElementById("win"), shade = document.getElementById("shade"),
+        frame = document.getElementById("winframe"), title = document.getElementById("wintitle"),
+        full = document.getElementById("winfull"), close = document.getElementById("winclose");
+  let opener = null;
+  const open = (a) => {
+    opener = a;
+    const w = a.dataset.win;
+    frame.src = w === "ai" ? "ai-system.html?embed=1" : "archive.html?only=" + w;
+    full.href = a.getAttribute("href");
+    title.textContent = a.dataset.title;
+    win.hidden = false; shade.hidden = false; close.focus();
+  };
+  const shut = () => { win.hidden = true; shade.hidden = true; frame.src = "about:blank"; opener?.focus(); };
+  if (["127.0.0.1", "localhost"].includes(location.hostname)) document.querySelectorAll(".ic.mine").forEach(a => a.hidden = false);
+  document.querySelectorAll(".ic[data-win]").forEach(a => a.addEventListener("click", e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault(); open(a);
+  }));
+  close.addEventListener("click", shut);
+  shade.addEventListener("click", shut);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !win.hidden) shut(); });
+})();
+</script>
 </body>
 </html>

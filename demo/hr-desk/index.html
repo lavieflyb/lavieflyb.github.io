@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>체험판 · 사내 인사 창구 앱</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: presenter stage — a phone mock (the app) beside a 시연 순서 panel; stacks to one column on phones */
+:root{
+  --bg:#ECEFF3; --surface:#FFFFFF; --surface-2:#F4F6F8; --fg:#1B1D21; --muted:#5A6170; --line:#DDE2E8;
+  --accent:#1F5F8B; --accent-soft:#E3EDF5; --on-accent:#FFFFFF;
+  --ok-bg:#E3EFE8; --ok-fg:#1E4630; --warn-bg:#FCEFE6; --warn-fg:#7E3810; --info-bg:#E3EDF5; --info-fg:#1F4E72;
+  --chat-bg:#D3DCE5; --bubble:#FFFFFF; --frame:#1B1D21; --shadow:rgb(20 30 45 / .16);
+  --font:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111317; --surface:#1C1F24; --surface-2:#22262C; --fg:#E8EAEE; --muted:#A6ADB9; --line:#2F343C;
+    --accent:#82B6DD; --accent-soft:#1E2D3A; --on-accent:#0E1A24;
+    --ok-bg:#1B3226; --ok-fg:#A2D6B6; --warn-bg:#3A2518; --warn-fg:#F2B48A; --info-bg:#1E2D3A; --info-fg:#A9CBE6;
+    --chat-bg:#18202A; --bubble:#262B32; --frame:#05070A; --shadow:rgb(0 0 0 / .45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111317; --surface:#1C1F24; --surface-2:#22262C; --fg:#E8EAEE; --muted:#A6ADB9; --line:#2F343C;
+  --accent:#82B6DD; --accent-soft:#1E2D3A; --on-accent:#0E1A24;
+  --ok-bg:#1B3226; --ok-fg:#A2D6B6; --warn-bg:#3A2518; --warn-fg:#F2B48A; --info-bg:#1E2D3A; --info-fg:#A9CBE6;
+  --chat-bg:#18202A; --bubble:#262B32; --frame:#05070A; --shadow:rgb(0 0 0 / .45);
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.5}
+*{box-sizing:border-box}
+button,a{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.stage{display:grid;grid-template-columns:minmax(0,390px) minmax(0,400px);gap:40px;justify-content:center;align-items:start;
+  padding-block:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (max-width:860px){.stage{grid-template-columns:minmax(0,1fr);justify-items:center;gap:24px}}
+
+.phone-col{width:min(390px,100%);display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:8px 10px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.fake{font-size:12px;color:var(--muted);text-align:center}
+
+.phone{height:min(760px,calc(100dvh - 130px));min-height:540px;background:var(--surface);border:10px solid var(--frame);border-radius:38px;
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:0 22px 50px var(--shadow)}
+@media (max-width:480px){.phone{border:1px solid var(--line);border-radius:18px;height:calc(100dvh - 150px);box-shadow:none}}
+
+.ph-head{display:flex;align-items:center;gap:6px;padding:12px 12px 10px;border-bottom:1px solid var(--line);background:var(--surface);min-height:52px}
+.ph-title{flex:1;min-width:0;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:34px;height:34px;display:grid;place-items:center;border:0;background:transparent;border-radius:10px;cursor:pointer;color:var(--fg);flex:none}
+.icon-btn:hover{background:var(--surface-2)}
+.icon-btn svg{width:20px;height:20px}
+.tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;letter-spacing:.02em;white-space:nowrap;flex:none}
+.tag.live{background:var(--ok-bg);color:var(--ok-fg)}
+.tag.p1{background:var(--info-bg);color:var(--info-fg)}
+.tag.p2{background:var(--warn-bg);color:var(--warn-fg)}
+
+.ph-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--surface-2)}
+.ph-body.chat{background:var(--chat-bg);padding:14px 12px;gap:10px}
+
+.msg{max-width:84%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.55}
+.msg .t{white-space:pre-line;margin:0}
+.msg.bot{background:var(--bubble);align-self:flex-start;border-top-left-radius:4px}
+.msg.me{background:var(--accent);color:var(--on-accent);align-self:flex-end;border-top-right-radius:4px}
+.bot-name{font-size:12px;color:var(--muted);align-self:flex-start;margin-bottom:-6px;padding-left:2px}
+.bbtn{display:block;width:100%;margin-top:8px;background:var(--surface-2);border:1px solid var(--line);text-align:center;padding:9px;border-radius:8px;
+  font-size:13px;font-weight:500;text-decoration:none;cursor:pointer}
+.sys{align-self:center;font-size:12px;color:var(--muted);background:var(--surface);padding:4px 12px;border-radius:999px;text-align:center}
+.next{align-self:stretch;display:flex;align-items:center;gap:10px;background:var(--info-bg);color:var(--info-fg);border-radius:12px;padding:10px 12px;font-size:13px}
+.next span{flex:1;min-width:0}
+
+.menu-cap{font-size:11px;color:var(--muted);text-align:center;padding:6px;background:var(--surface);border-top:1px solid var(--line);letter-spacing:.02em}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border-top:1px solid var(--line)}
+.menu button{padding:15px 4px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:transparent;font-size:13px;font-weight:500;cursor:pointer}
+.menu button:nth-child(3n){border-right:0}
+.menu button:nth-child(n+4){border-bottom:0}
+.menu button:hover{background:var(--surface-2)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:left}
+button.card{cursor:pointer;width:100%}
+button.card:hover{border-color:var(--accent)}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h3{margin:0;font-size:15px;font-weight:600}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.chip{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.chip.new{background:var(--warn-bg);color:var(--warn-fg);border-color:transparent}
+.chip.ok{background:var(--ok-bg);color:var(--ok-fg);border-color:transparent}
+.hello{display:flex;align-items:center;gap:12px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;flex:none}
+.hello b{font-size:16px}
+
+.row{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums;font-size:14px}
+.row .k{color:var(--muted)}
+.row.total{font-weight:700;border-top:1px solid var(--line);padding-top:8px}
+.big{font-size:28px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.label{font-size:12px;color:var(--muted);letter-spacing:.03em;margin:0}
+
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:6px;padding:12px 14px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;text-decoration:none;text-align:center}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:var(--surface);border-color:var(--line)}
+.btn.sm{padding:7px 10px;font-size:12px;border-radius:8px}
+.btn.block{width:100%}
+.actions{display:flex;flex-direction:column;gap:8px}
+.done{background:var(--ok-bg);color:var(--ok-fg);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:500}
+.note{background:var(--info-bg);color:var(--info-fg);border-radius:12px;padding:10px 12px;font-size:13px}
+.note.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.names{display:flex;flex-wrap:wrap;gap:6px}
+.list{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.steps-in{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+blockquote{margin:0;padding:10px 12px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 8px 8px 0;font-size:14px}
+.qa dt{font-weight:600;margin-top:4px}
+.qa dd{margin:2px 0 6px;color:var(--muted)}
+.login-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:28px 8px 8px}
+.mark{width:64px;height:64px;border-radius:18px;background:var(--fg);color:var(--surface);display:grid;place-items:center;font-size:30px;font-weight:700;font-family:Georgia,"Times New Roman",serif}
+.login-hero h2{margin:4px 0 0;font-size:20px;text-wrap:balance}
+.person{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.person div{min-width:0}
+
+.notes{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:20px;width:100%}
+.eyebrow{font-size:12px;letter-spacing:.06em;color:var(--muted);margin:0}
+.notes h1{margin:4px 0 6px;font-size:24px;text-wrap:balance}
+.notes h2{margin:0 0 10px;font-size:15px}
+.lede{margin:0;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.steps li{counter-increment:s}
+.steps button{width:100%;display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.steps button:hover{border-color:var(--accent)}
+.steps button::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px}
+.steps b{display:block;font-size:14px}
+.steps span{display:block;color:var(--muted);font-size:13px}
+.legend{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.legend li{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:start;font-size:13px}
+.legend .tag{justify-self:start}
+.fine{font-size:12px;color:var(--muted);margin:0}
+</style>
+
+<main class="stage">
+  <div class="phone-col">
+    <div class="seg" role="group" aria-label="보기 전환">
+      <button type="button" id="mode-staff" data-a="mode-staff" aria-pressed="true">직원 화면</button>
+      <button type="button" id="mode-admin" data-a="mode-admin" aria-pressed="false">관리자 화면</button>
+    </div>
+    <div class="phone" id="phone" aria-live="polite"></div>
+    <p class="fake">이름·금액·실적은 모두 시연용 가짜 데이터입니다</p>
+  </div>
+
+  <section class="notes" aria-label="시연 안내">
+    <div>
+      <p class="eyebrow">시연판 · 2026년 11월</p>
+      <h1>사내 인사 창구</h1>
+      <p class="lede">직원은 카카오톡 채팅방 메뉴에서 바로 들어오고, 이사님은 누가 명세서와 규정을 확인했는지 한 화면에서 봅니다.</p>
+    </div>
+    <div>
+      <h2>시연 순서</h2>
+      <ol class="steps">
+        <li><button type="button" data-a="step:1"><div><b>채팅방 메뉴</b><span>지금 운영 중인 6칸 메뉴와 인사봇 답변</span></div></button></li>
+        <li><button type="button" data-a="step:2"><div><b>급여명세서 → 처음 시작</b><span>카카오 계정으로 시작, 이사님이 처음 한 번 승인</span></div></button></li>
+        <li><button type="button" data-a="step:3"><div><b>명세서 확인</b><span>계산 근거까지 보고 '확인했어요'</span></div></button></li>
+        <li><button type="button" data-a="step:4"><div><b>새 규정 읽기</b><span>규정을 읽고 '읽었어요'로 기록</span></div></button></li>
+        <li><button type="button" data-a="step:5"><div><b>관리자 확인 현황</b><span>방금 한 확인이 바로 반영됨</span></div></button></li>
+        <li><button type="button" data-a="step:6"><div><b>내 실적·KPI</b><span>2차 개발 예시 화면</span></div></button></li>
+      </ol>
+    </div>
+    <div>
+      <h2>이미 있는 것과 만들 것</h2>
+      <ul class="legend">
+        <li><span class="tag live">운영 중</span><span>카카오 사내채널, 채팅방 메뉴 6칸, 인사봇, 시프티·ECOUNT·노션 연결. 지금까지 든 비용 없음.</span></li>
+        <li><span class="tag p1">1차 개발</span><span>카카오 로그인과 첫 승인, 급여명세서 조회와 확인 기록, 규정 읽음 기록, 관리자 확인 현황. 대표님 승인(개발 방식·비용) 필요.</span></li>
+        <li><span class="tag p2">2차 개발</span><span>내 실적·KPI. 실적 원본, 공개 범위, 인센티브 기준이 정해진 뒤.</span></li>
+      </ul>
+    </div>
+    <p class="fine">취업규칙·직원 핸드북·시프티 사용법 버튼은 실제 노션 공개 페이지로 열립니다. 그 밖의 이름·금액·실적은 모두 예시입니다.</p>
+    <button type="button" class="btn ghost" data-a="reset">처음부터 다시</button>
+  </section>
+</main>
+
+<script>
+const LINKS = {
+  rules: '#demo',
+  handbook: '#demo',
+  shiftee: '#demo',
+  ecount: 'https://login.ecount.com/',
+  shifteeWeb: 'https://shiftee.io/app',
+  appStore: 'https://apps.apple.com/kr/app/id1170002741',
+  playStore: 'https://play.google.com/store/apps/details?id=io.shiftee.app'
+};
+
+const BOT = {
+  pay: "급여명세서를 여기서 바로 보는 기능은 준비 중이에요. 완성되면 이 메뉴에서 바로 열 수 있게 할게요.\n지금은 노무법인에서 매달 개인 메일로 보내 드려요.\n못 받으셨거나 계산이 궁금하면 아래 '담당자 연결'을 누른 뒤 소속(회사·매장)과 이름을 남겨 주세요.",
+  conn: "담당자와 1:1 채팅으로 연결해 드릴게요.\n아래 버튼을 누른 뒤 소속(회사·매장)과 이름을 먼저 남겨 주세요.\n예) 와인바 1호점 / 홍길동",
+  contract: "계약서는 ECOUNT에서 확인할 수 있어요. 아래 'ECOUNT 열기'를 눌러 로그인해 주세요.\n회사코드·아이디·비밀번호를 모르면 '담당자 연결'을 누른 뒤 소속(회사·매장)과 이름을 남겨 주세요.",
+  docs: "취업규칙과 업무 매뉴얼은 아래 버튼으로 볼 수 있어요.\n궁금한 점은 메뉴의 '담당자 연결'을 누른 뒤 소속(회사·매장)과 이름을 남겨 주세요.",
+  kpi: "내 실적·KPI를 여기서 바로 보는 기능은 준비 중이에요. 완성되면 이 메뉴에서 바로 열 수 있게 할게요.\n궁금한 점은 아래 '담당자 연결'을 누른 뒤 소속(회사·매장)과 이름을 남겨 주세요."
+};
+
+const MENU = [
+  {label:'연차 스케줄', a:'m-shift'}, {label:'급여명세서', a:'m-pay'}, {label:'담당자 연결', a:'m-conn'},
+  {label:'계약서', a:'m-contract'}, {label:'규정·매뉴얼', a:'m-docs'}, {label:'내 실적·KPI', a:'m-kpi'}
+];
+
+const DOCS = [
+  {id:'schedule', title:'근무 스케줄 변경 규정', meta:'새 규정 · 예시',
+   summary:['스케줄을 바꿀 때는 직원끼리 바꾸지 않습니다.','먼저 담당자에게 알리고, 승인된 뒤에 시프티에 반영합니다.'],
+   quote:'근무 스케줄 변경 시 직원 간 임의 변경으로 처리하지 않고 사전에 담당자에게 공유하여 승인 후 반영한다.',
+   source:'노션 HR SOP「재직자 인사관리 프로세스」 문구로 만든 예시'},
+  {id:'rules', title:'취업규칙', meta:'2023.10.10 제정',
+   summary:['회사 공통 취업규칙 원문(PDF)입니다.','직원이 언제든 볼 수 있게 두어야 하는 문서입니다.'], link:LINKS.rules},
+  {id:'handbook', title:'직원 핸드북', meta:'Employee Handbook',
+   summary:['회사와 매장의 목적, 핵심 가치, 행동 기준을 설명합니다.','핵심 가치: 정품과 정도, 환대, 전문성, 안전, 팀워크'], link:LINKS.handbook},
+  {id:'shiftee', title:'시프티 사용법', meta:'출근·퇴근·연차',
+   summary:['처음 쓸 때: 회원가입 → 회사 합류 → 출퇴근 기록 → 필요하면 요청 보내기','출근 버튼을 못 눌렀을 때나 연차·반차를 쓸 때 요청을 올립니다.'], link:LINKS.shiftee}
+];
+
+const PAY = {
+  month:'2026년 10월분', wage:11000,
+  earn:[['기본급 (209시간)',2299000],['연장근로수당 (8시간 × 1.5)',132000],['야간근로수당 (6시간 × 0.5)',33000]],
+  deduct:[['국민연금',117040],['건강보험',88580],['장기요양보험',11640],['고용보험',22170],['소득세',37800],['지방소득세',3780]]
+};
+const sum = arr => arr.reduce((s,[,v]) => s + v, 0);
+const won = n => n.toLocaleString('ko-KR') + '원';
+
+const VIEWS = {
+  chat:{t:'예시컴퍼니 사내채널', p:'live'}, shiftee:{t:'연차 스케줄', p:'live'}, contract:{t:'계약서', p:'live'},
+  login:{t:'인사 창구 시작하기', p:'p1'}, pending:{t:'승인 대기', p:'p1'}, home:{t:'내 인사 정보', p:'p1'},
+  payslip:{t:'10월 급여명세서', p:'p1'}, faq:{t:'급여 계산 FAQ', p:'p1'}, docs:{t:'규정·매뉴얼', p:'p1'},
+  doc:{t:'', p:'p1'}, kpi:{t:'내 실적·KPI', p:'p2'}, admin:{t:'확인 현황 · 관리자', p:'p1'}
+};
+const PHASE = {live:'운영 중', p1:'1차 개발', p2:'2차 개발'};
+
+const INIT = {mode:'staff', view:'chat', stack:[], loggedIn:false, approved:false, target:null, chat:[],
+  payAck:null, read:{schedule:false, rules:true, handbook:true, shiftee:true}, docId:null,
+  connected:false, daeunApproved:false, askSent:false, remindSent:false};
+let S = JSON.parse(JSON.stringify(INIT));
+
+const ICON = {
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>'
+};
+
+function stamp(){
+  const d = new Date();
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+/* ---------- views ---------- */
+function msgHTML(m){
+  if(m.who === 'sys') return `<div class="sys">${m.text}</div>`;
+  if(m.who === 'next') return `<div class="next"><span>${m.text}</span><button type="button" class="btn primary sm" data-a="${m.a}">${m.label}</button></div>`;
+  const btns = (m.buttons || []).map(b => b.href
+    ? `<a class="bbtn" href="${b.href}" target="_blank" rel="noopener">${b.label}</a>`
+    : `<button type="button" class="bbtn" data-a="${b.a}">${b.label}</button>`).join('');
+  const name = m.who === 'bot' ? '<div class="bot-name">예시컴퍼니 인사봇</div>' : '';
+  return `${name}<div class="msg ${m.who}"><p class="t">${m.text}</p>${btns}</div>`;
+}
+
+function vChat(){
+  const msgs = [{who:'bot', text:'예시컴퍼니 인사봇입니다.\n아래 메뉴에서 필요한 것을 눌러 주세요.'}, ...S.chat];
+  return `<div class="ph-body chat" id="scroller">${msgs.map(msgHTML).join('')}</div>
+    <div class="menu-cap">채팅방 메뉴 · 지금 운영 중인 6칸</div>
+    <div class="menu">${MENU.map(m => `<button type="button" data-a="${m.a}">${m.label}</button>`).join('')}</div>`;
+}
+
+function vShiftee(){
+  return `<div class="ph-body">
+    <div class="card"><h3>메뉴를 누르면</h3>
+      <ol class="steps-in"><li>앱스토어·플레이스토어의 시프티 화면이 열려요.</li><li>'열기'를 누르면 시프티 앱으로 넘어가요.</li><li>앱이 없으면 같은 화면에서 설치해요.</li></ol></div>
+    <div class="note">시프티가 앱을 바로 여는 주소를 공개하지 않아 스토어를 한 번 거칩니다. 연차 잔여와 스케줄은 시프티 앱에서 그대로 봅니다.</div>
+    <div class="actions">
+      <a class="btn ghost block" href="${LINKS.appStore}" target="_blank" rel="noopener">앱스토어에서 시프티 보기</a>
+      <a class="btn ghost block" href="${LINKS.playStore}" target="_blank" rel="noopener">플레이스토어에서 시프티 보기</a>
+      <a class="btn ghost block" href="${LINKS.shiftee}" target="_blank" rel="noopener">시프티 사용법 (노션)</a>
+    </div></div>`;
+}
+
+function vContract(){
+  return `<div class="ph-body">
+    <div class="card"><h3>계약서는 ECOUNT에서</h3><p class="sub">ECOUNT에 로그인하면 본인 계약서를 볼 수 있어요. 회사코드·아이디·비밀번호는 담당자에게 받습니다.</p></div>
+    <div class="note warn">직원 아이디를 만들기 전에, 본인 계약서만 보이게 권한을 나눌 수 있는지 ECOUNT에 확인해야 합니다.</div>
+    <div class="actions">
+      <a class="btn primary block" href="${LINKS.ecount}" target="_blank" rel="noopener">ECOUNT 열기</a>
+      <button type="button" class="btn ghost block" data-a="home-conn">담당자에게 문의</button>
+    </div></div>`;
+}
+
+function vLogin(){
+  return `<div class="ph-body">
+    <div class="login-hero"><div class="mark">M</div><h2>예시컴퍼니 인사 창구</h2>
+      <p class="sub">처음 한 번만 카카오 계정으로 시작하면, 다음부터는 채팅방 메뉴에서 바로 열려요.</p></div>
+    <button type="button" class="btn primary block" data-a="login">카카오 계정으로 계속</button>
+    <div class="card"><p class="label">받는 정보</p><p class="sub">카카오 회원번호와 닉네임만 받습니다. 이름·전화번호·주민번호는 받지 않습니다.</p></div>
+  </div>`;
+}
+
+function vPending(){
+  if(S.approved){
+    return `<div class="ph-body"><div class="done">승인되었습니다. 이제 내 명세서와 규정을 볼 수 있어요.</div>
+      <button type="button" class="btn primary block" data-a="start">시작하기</button></div>`;
+  }
+  return `<div class="ph-body">
+    <div class="card"><h3>이사님 승인을 기다리는 중</h3>
+      <p class="sub">처음 한 번은 이사님이 직원 명단과 맞춰 승인합니다. 다른 사람이 들어오는 것을 막기 위해서예요.</p>
+      <div class="person"><div><b>한서연</b><p class="sub">와인바 1호점 · 카카오 닉네임 '서연'</p></div><span class="chip new">대기</span></div></div>
+    <div class="actions">
+      <button type="button" class="btn primary block" data-a="to-admin">관리자 화면에서 승인해 보기</button>
+      <button type="button" class="btn ghost block" data-a="demo-approve">시연: 바로 승인</button>
+    </div></div>`;
+}
+
+function vHome(){
+  const payChip = S.payAck ? `<span class="chip ok">확인함</span>` : `<span class="chip new">새 명세서</span>`;
+  const docChip = S.read.schedule ? `<span class="chip ok">모두 읽음</span>` : `<span class="chip new">새 규정 1</span>`;
+  return `<div class="ph-body">
+    <div class="hello"><div class="avatar">서</div><div><b>한서연 님</b><p class="sub">와인바 1호점 · 직원</p></div></div>
+    <button type="button" class="card" data-a="go:payslip"><div class="card-top"><h3>10월 급여명세서</h3>${payChip}</div><p class="sub">${S.payAck ? S.payAck + ' 확인' : '계산 근거와 함께 볼 수 있어요'}</p></button>
+    <button type="button" class="card" data-a="go:docs"><div class="card-top"><h3>규정·매뉴얼</h3>${docChip}</div><p class="sub">${S.read.schedule ? '새 규정을 읽었어요' : '근무 스케줄 변경 규정 · 읽음 확인 필요'}</p></button>
+    <button type="button" class="card" data-a="go:kpi"><div class="card-top"><h3>내 실적·KPI</h3><span class="tag p2">2차</span></div><p class="sub">이번 달 매장 달성률 82% (잠정)</p></button>
+    <button type="button" class="card" data-a="go:shiftee"><div class="card-top"><h3>연차·스케줄</h3><span class="tag live">운영 중</span></div><p class="sub">시프티 앱에서 확인·신청</p></button>
+    <button type="button" class="card" data-a="go:contract"><div class="card-top"><h3>계약서</h3><span class="tag live">운영 중</span></div><p class="sub">ECOUNT에서 확인</p></button>
+    <button type="button" class="card" data-a="home-conn"><div class="card-top"><h3>담당자에게 문의</h3><span class="tag live">운영 중</span></div><p class="sub">카카오톡 1:1 채팅으로 연결</p></button>
+  </div>`;
+}
+
+function vPayslip(){
+  const gross = sum(PAY.earn), ded = sum(PAY.deduct), net = gross - ded;
+  const rows = arr => arr.map(([k,v]) => `<div class="row"><span class="k">${k}</span><span>${won(v)}</span></div>`).join('');
+  const ack = S.payAck
+    ? `<div class="done">${S.payAck} 확인함 · 관리자 화면에 기록됐어요</div>`
+    : `<button type="button" class="btn primary block" data-a="pay-ack">확인했어요</button>`;
+  return `<div class="ph-body">
+    <div class="card"><div class="card-top"><p class="label">${PAY.month} · 실지급액</p><span class="chip">예시 금액</span></div>
+      <div class="big">${won(net)}</div><p class="sub">한서연 · 와인바 1호점</p></div>
+    <div class="card"><h3>지급</h3>${rows(PAY.earn)}<div class="row total"><span>지급 합계</span><span>${won(gross)}</span></div></div>
+    <div class="card"><h3>공제</h3>${rows(PAY.deduct)}<div class="row total"><span>공제 합계</span><span>${won(ded)}</span></div></div>
+    <div class="card"><h3>계산 근거</h3>
+      <div class="row"><span class="k">통상시급</span><span>${won(PAY.wage)}</span></div>
+      <div class="row"><span class="k">월 기준시간</span><span>209시간</span></div>
+      <div class="row"><span class="k">연장근로</span><span>8시간</span></div>
+      <div class="row"><span class="k">야간근로 (22시~6시)</span><span>6시간</span></div>
+      <div class="row"><span class="k">근무일수</span><span>22일</span></div></div>
+    <div class="actions">${ack}
+      <button type="button" class="btn ghost block" data-a="go:faq">계산이 궁금해요</button>
+      <button type="button" class="btn ghost block" data-a="home-conn">담당자에게 문의</button></div>
+    <div class="card"><p class="label">지난 명세서</p><div class="row"><span>2026년 9월분</span><span class="k">보기</span></div><div class="row"><span>2026년 8월분</span><span class="k">보기</span></div></div>
+  </div>`;
+}
+
+function vFaq(){
+  return `<div class="ph-body"><div class="card"><dl class="qa">
+    <dt>연장근로수당은 어떻게 계산하나요?</dt><dd>통상시급 × 연장한 시간 × 1.5배입니다.</dd>
+    <dt>야간근로수당은요?</dt><dd>밤 10시부터 아침 6시 사이에 일한 시간 × 통상시급 × 0.5배가 더 붙습니다.</dd>
+    <dt>209시간은 무엇인가요?</dt><dd>주 40시간 근무를 한 달로 바꾼 시간입니다. 주휴시간이 들어 있습니다.</dd>
+    <dt>공제는 무엇인가요?</dt><dd>4대보험 중 본인 부담분(국민연금·건강보험·장기요양·고용보험)과 소득세·지방소득세입니다.</dd>
+  </dl></div>
+  <div class="note">시프티 출퇴근 기록을 근무시간으로 바꾸는 규칙은 대표님·노무사님 확인 뒤에 넣습니다.</div>
+  <button type="button" class="btn ghost block" data-a="home-conn">그래도 궁금하면 담당자에게 문의</button></div>`;
+}
+
+function docChip(d){
+  if(S.read[d.id]) return `<span class="chip ok">읽음</span>`;
+  return `<span class="chip new">읽음 확인 필요</span>`;
+}
+
+function vDocs(){
+  return `<div class="ph-body">
+    <div class="note">지금은 채팅방 '규정·매뉴얼'에서 노션 링크로 운영 중입니다. 웹에서는 직원별로 '읽었어요'를 기록합니다.</div>
+    <ul class="list">${DOCS.map(d => `<li><button type="button" class="card" data-a="doc:${d.id}">
+      <div class="card-top"><h3>${d.title}</h3>${docChip(d)}</div><p class="sub">${d.meta}</p></button></li>`).join('')}</ul></div>`;
+}
+
+function vDoc(){
+  const d = DOCS.find(x => x.id === S.docId) || DOCS[0];
+  const read = S.read[d.id];
+  const readBox = read
+    ? `<div class="done">${typeof read === 'string' ? read + ' 읽음 · 관리자 화면에 기록됐어요' : '이미 읽은 문서예요'}</div>`
+    : `<button type="button" class="btn primary block" data-a="read:${d.id}">읽었어요</button>`;
+  return `<div class="ph-body">
+    <div class="card"><div class="card-top"><h3>${d.title}</h3><span class="chip">${d.meta}</span></div>
+      <ul class="steps-in">${d.summary.map(s => `<li>${s}</li>`).join('')}</ul></div>
+    ${d.quote ? `<blockquote>${d.quote}</blockquote><p class="fine">${d.source}</p>` : ''}
+    ${d.link ? `<a class="btn ghost block" href="${d.link}" target="_blank" rel="noopener">원문 보기 (노션)</a>` : ''}
+    ${readBox}</div>`;
+}
+
+function vKpi(){
+  return `<div class="ph-body">
+    <div class="note warn">2차 개발 예시 화면입니다. 실적 원본, 공개 범위, 인센티브 기준이 정해진 뒤 만듭니다.</div>
+    <div class="card"><div class="card-top"><h3>와인바 1호점 · 11월</h3><span class="chip">잠정</span></div>
+      <div class="row"><span class="k">매장 매출 목표 달성률</span><span>82%</span></div><div class="bar"><i style="width:82%"></i></div>
+      <p class="sub">11월 20일까지, 검증 전 숫자</p></div>
+    <div class="card"><div class="card-top"><h3>10월</h3><span class="chip ok">확정</span></div>
+      <div class="row"><span class="k">매장 매출 목표 달성률</span><span>104%</span></div><div class="bar"><i style="width:100%"></i></div>
+      <p class="sub">월 마감 뒤 확정한 숫자</p></div>
+    <div class="card"><h3>내 실적</h3><p class="sub">직원별 판매 집계 방법을 확인하는 중입니다.</p></div>
+    <div class="card"><h3>인센티브 기준</h3><p class="sub">기준이 확정되면 여기에 표시합니다. 금액은 급여명세서가 기준입니다.</p></div>
+  </div>`;
+}
+
+function vAdmin(){
+  const total = 18;
+  const payOk = 15 + (S.payAck ? 1 : 0);
+  const payMissing = ['서민호 · 와인바 3호점', '윤지아 · 본사'].concat(S.payAck ? [] : ['한서연 · 와인바 1호점']);
+  const readOk = 9 + (S.read.schedule ? 1 : 0);
+  const waiting = [];
+  if(S.loggedIn && !S.approved) waiting.push({name:'한서연', sub:"와인바 1호점 · 카카오 닉네임 '서연'", a:'approve-me'});
+  if(!S.daeunApproved) waiting.push({name:'오다은', sub:"카페 영업 · 카카오 닉네임 '다은'", a:'approve-daeun'});
+  const waitHTML = waiting.length
+    ? waiting.map(w => `<div class="person"><div><b>${w.name}</b><p class="sub">${w.sub}</p></div><button type="button" class="btn primary sm" data-a="${w.a}">승인</button></div>`).join('')
+    : `<p class="sub">대기 중인 직원이 없어요.</p>`;
+  return `<div class="ph-body">
+    <p class="sub">이 화면은 관리자(이사님)만 봅니다.</p>
+    <div class="card"><div class="card-top"><h3>처음 가입 승인</h3><span class="chip">${waiting.length}명 대기</span></div>${waitHTML}</div>
+    <div class="card"><div class="card-top"><h3>10월 급여명세서</h3><span class="chip">${payOk}/${total} 확인</span></div>
+      <div class="bar"><i style="width:${payOk/total*100}%"></i></div>
+      <p class="label">아직 확인 안 함</p><div class="names">${payMissing.map(n => `<span class="chip">${n}</span>`).join('')}</div>
+      <p class="label">문의</p>
+      <div class="person"><div><b>정우진 · 와인바 2호점</b><p class="sub">연장근로 8시간이 맞는지 확인 요청</p></div></div>
+      ${S.askSent ? `<div class="done">노무사님께 확인 요청함 (시연 · 실제로 보내지 않음)</div>` : `<button type="button" class="btn ghost block" data-a="ask-send">노무사님께 확인 요청</button>`}</div>
+    <div class="card"><div class="card-top"><h3>새 규정 · 근무 스케줄 변경</h3><span class="chip">${readOk}/${total} 읽음</span></div>
+      <div class="bar"><i style="width:${readOk/total*100}%"></i></div>
+      ${S.remindSent ? `<div class="done">${total - readOk}명에게 알림 표시 (시연 · 실제로 보내지 않음). 자동 알림은 알림톡 연결 후</div>` : `<button type="button" class="btn ghost block" data-a="remind">안 읽은 ${total - readOk}명에게 다시 알림</button>`}</div>
+  </div>`;
+}
+
+const RENDER = {chat:vChat, shiftee:vShiftee, contract:vContract, login:vLogin, pending:vPending, home:vHome,
+  payslip:vPayslip, faq:vFaq, docs:vDocs, doc:vDoc, kpi:vKpi};
+
+function render(){
+  const phone = document.getElementById('phone');
+  const admin = S.mode === 'admin';
+  const view = admin ? 'admin' : S.view;
+  const meta = VIEWS[view];
+  let title = meta.t;
+  if(view === 'doc'){ const d = DOCS.find(x => x.id === S.docId); title = d ? d.title : '규정'; }
+  const canBack = !admin && S.stack.length > 0;
+  const canHome = !admin && S.approved && !['chat','home','login','pending'].includes(view);
+  phone.innerHTML = `<div class="ph-head">
+      ${canBack ? `<button type="button" class="icon-btn" data-a="back" aria-label="뒤로">${ICON.back}</button>` : ''}
+      <div class="ph-title">${title}</div>
+      ${canHome ? `<button type="button" class="icon-btn" data-a="go:home" aria-label="홈">${ICON.home}</button>` : ''}
+      <span class="tag ${meta.p}">${PHASE[meta.p]}</span>
+    </div>${admin ? vAdmin() : RENDER[view]()}`;
+  document.getElementById('mode-staff').setAttribute('aria-pressed', String(!admin));
+  document.getElementById('mode-admin').setAttribute('aria-pressed', String(admin));
+  const sc = document.getElementById('scroller');
+  if(sc) sc.scrollTop = sc.scrollHeight;
+  else { const b = phone.querySelector('.ph-body'); if(b) b.scrollTop = 0; }
+}
+
+/* ---------- navigation ---------- */
+function go(v){ S.stack.push(S.view); S.view = v; render(); }
+function replace(v){ S.view = v; render(); }
+function back(){ S.view = S.stack.pop() || 'chat'; render(); }
+function requireLogin(target){
+  if(S.loggedIn && S.approved){ go(target); return; }
+  S.target = target;
+  go(S.loggedIn ? 'pending' : 'login');
+}
+function chatPush(msgs){
+  S.mode = 'staff';
+  if(S.view !== 'chat'){ S.stack = []; S.view = 'chat'; }
+  S.chat.push(...msgs);
+  render();
+}
+function signedIn(){ S.loggedIn = true; S.approved = true; S.target = null; }
+
+function act(a){
+  const [cmd, arg] = a.split(':');
+  switch(cmd){
+    case 'back': back(); break;
+    case 'go': (arg === 'home') ? (S.stack = ['chat'], replace('home')) : go(arg); break;
+    case 'mode-staff': S.mode = 'staff'; render(); break;
+    case 'mode-admin': S.mode = 'admin'; render(); break;
+    case 'm-shift': go('shiftee'); break;
+    case 'm-pay': chatPush([{who:'me', text:'급여명세서'}, {who:'bot', text:BOT.pay, buttons:[{label:'담당자 연결', a:'connect'}]},
+      {who:'next', text:'웹이 완성되면 이 메뉴에서 바로 열리는 화면', label:'개발 후 화면', a:'open:payslip'}]); break;
+    case 'm-conn': chatPush([{who:'me', text:'담당자 연결'}, {who:'bot', text:BOT.conn, buttons:[{label:'담당자 연결', a:'connect'}]}]); break;
+    case 'm-contract': chatPush([{who:'me', text:'계약서 다시 받기'}, {who:'bot', text:BOT.contract,
+      buttons:[{label:'담당자 연결', a:'connect'}, {label:'ECOUNT 열기', href:LINKS.ecount}]}]); break;
+    case 'm-docs': chatPush([{who:'me', text:'규정 매뉴얼'}, {who:'bot', text:BOT.docs,
+      buttons:[{label:'취업규칙', href:LINKS.rules}, {label:'시프티 사용법', href:LINKS.shiftee}, {label:'직원 핸드북', href:LINKS.handbook}]},
+      {who:'next', text:'웹에서는 직원별 읽음 기록까지', label:'개발 후 화면', a:'open:docs'}]); break;
+    case 'm-kpi': chatPush([{who:'me', text:'내 실적'}, {who:'bot', text:BOT.kpi, buttons:[{label:'담당자 연결', a:'connect'}]},
+      {who:'next', text:'2차 개발 예시 화면', label:'개발 후 화면', a:'open:kpi'}]); break;
+    case 'connect':
+      if(S.connected){ chatPush([{who:'sys', text:'이미 상담원과 채팅 중이에요'}]); break; }
+      S.connected = true;
+      chatPush([{who:'sys', text:'현재 상담원과 채팅 중'}, {who:'me', text:'와인바 1호점 / 한서연입니다.\n10월 연장근로 시간 확인 부탁드려요.'},
+        {who:'sys', text:'이사님 파트너센터 「내 채팅」에 들어갑니다'}]); break;
+    case 'home-conn': S.mode = 'staff'; S.stack = []; S.view = 'chat'; act('connect'); break;
+    case 'open': requireLogin(arg); break;
+    case 'login': S.loggedIn = true; replace('pending'); break;
+    case 'to-admin': S.mode = 'admin'; render(); break;
+    case 'demo-approve': case 'approve-me': S.approved = true; render(); break;
+    case 'approve-daeun': S.daeunApproved = true; render(); break;
+    case 'start': { const t = S.target || 'home'; S.target = null; replace(t); break; }
+    case 'pay-ack': S.payAck = stamp(); render(); break;
+    case 'doc': S.docId = arg; go('doc'); break;
+    case 'read': S.read[arg] = stamp(); render(); break;
+    case 'ask-send': S.askSent = true; render(); break;
+    case 'remind': S.remindSent = true; render(); break;
+    case 'reset': S = JSON.parse(JSON.stringify(INIT)); render(); break;
+    case 'step': step(Number(arg)); break;
+  }
+}
+
+function step(n){
+  if(n === 1){ S.mode = 'staff'; S.stack = []; S.view = 'chat'; render(); }
+  if(n === 2){ S.mode = 'staff'; S.stack = []; S.view = 'chat'; S.loggedIn = false; S.approved = false; act('m-pay'); }
+  if(n === 3){ signedIn(); S.mode = 'staff'; S.stack = ['chat']; S.view = 'payslip'; render(); }
+  if(n === 4){ signedIn(); S.mode = 'staff'; S.stack = ['chat','docs']; S.docId = 'schedule'; S.view = 'doc'; render(); }
+  if(n === 5){ S.mode = 'admin'; render(); }
+  if(n === 6){ signedIn(); S.mode = 'staff'; S.stack = ['chat']; S.view = 'kpi'; render(); }
+  if(window.matchMedia('(max-width: 860px)').matches) document.getElementById('phone').scrollIntoView({block:'start'});
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if(!el) return;
+  e.preventDefault();
+  act(el.dataset.a);
+});
+render();
+</script>

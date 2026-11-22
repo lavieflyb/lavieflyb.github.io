@@ -1,1 +1,125 @@
-[]
+[
+  {
+    "no": 1,
+    "date": "2026-11-13",
+    "category": "행사",
+    "title": "PCC GALA DINNER - Saint Luis Ray Palatinos Global Launch",
+    "place": "Macao, MGM Cotai",
+    "lat": 22.145,
+    "lng": 113.565,
+    "note": "11월 12일부터 15일까지 홍콩 출장. 13일 저녁, 마카오 MGM 코타이에서 열린 세인트 루이스 레이 팔라티노스 글로벌 런칭 갈라 디너에 갔다. 세계에서 처음 공개되는 자리였다. 리무진을 타고 갔는데 이름이 같은 다른 장소에 내려서 택시로 급히 다시 이동했고, 쇼에 크게 늦지 않았다. 쇼와 디너를 함께했고, 내 계정으로 현장을 라이브로 전했다. 샴페인과 시가 한 개비로 밤을 마무리했다. 돌아와서는 현장에서 찍은 영상과 사진으로 후기 영상과 글을 정리했다.\n\n행사 정보 — 아시아 유통사 퍼시픽 시가 컴퍼니(PCC) 주최, 해외 게스트 500명 이상. 하바노스 부사장이 팔라티노스(52×140mm, 풀바디)를 소개했고 Las Marías와 Mambo Man의 공연이 이어졌다. 자선 경매에서 휴미더 4점이 약 HKD 620만에 모두 낙찰, 수익금은 쿠바 공공 의료에 쓰인다. (출처: Habanos, S.A. 보도자료·Cigar Aficionado 2026.11.16)",
+    "keep": "",
+    "link": "",
+    "photo": "img/20261122-145341-IMG_9048.jpg",
+    "photos": [
+      "img/20261122-145341-IMG_9048.jpg",
+      "img/20261122-145341-IMG_9050.jpg",
+      "img/20261122-145342-IMG_9042.jpg",
+      "img/20261122-145343-IMG_9041.jpg",
+      "img/20261122-145343-IMG_9003.jpg",
+      "img/20261122-145344-IMG_9007.jpg",
+      "img/20261122-145345-IMG_8821.jpg",
+      "img/20261122-145345-IMG_8817.jpg",
+      "img/20261122-145346-IMG_9045.jpg",
+      "img/20261122-145347-IMG_8819.jpg",
+      "img/20261122-145350-IMG_8691.jpg"
+    ],
+    "photo_alt": "",
+    "updated": "2026-11-22T15:40",
+    "public": true
+  },
+  {
+    "no": 2,
+    "date": "2026-10-26",
+    "category": "사람",
+    "title": "저스틴비버 만남",
+    "place": "Seoul, Sowol-ro, Pierre Cigar Namsan",
+    "lat": 37.543,
+    "lng": 126.988,
+    "note": "한국 일정을 마치고 출국하는 날 아침, 저스틴 비버가 매장에 들르면서 갑자기 만나게 됐다. 함께 사진을 찍고 사인을 받았다.\n\n이날 그가 고른 시가 — EGM 디아데마스, 코히바 베히케, 코히바 에스플렌디도스, 로메오 이 훌리에타 처칠. (시가 목록 출처: 라운지 공식 인스타그램 2026.10.28 게시물)",
+    "keep": "",
+    "link": "https://www.instagram.com/reel/De8ydfFThKm/",
+    "photo": "img/20261122-150534-IMG_8359.jpg",
+    "photos": [
+      "img/20261122-150534-IMG_8359.jpg"
+    ],
+    "photo_alt": "",
+    "updated": "2026-11-22T15:26",
+    "public": true
+  },
+  {
+    "no": 3,
+    "date": "2026-10-09",
+    "category": "사람",
+    "title": "Cigar Maker Maya Selva와의 만남",
+    "place": "Hong Kong",
+    "lat": 22.28,
+    "lng": 114.16,
+    "note": "10월 9일, 홍콩 출장 중 시가 프로듀서 런치에서 시가메이커 마야 셀바를 만났다. 가는 길에 택시 앱 카드 결제가 안 돼 늦었지만, 런치 자리에서는 즐거운 시간을 보냈다. 다음 날에는 오후 2시까지 시가 교육을 듣고 귀국했다.\n\n인물 정보 — 마야 셀바(Maya Selva)는 온두라스 테구시갈파에서 프랑스인 어머니와 온두라스인 아버지 사이에서 태어난 시가메이커다. 1995년 온두라스 자마스트란 계곡의 잎으로 첫 브랜드 플로르 데 셀바(Flor de Selva)를 시작했고, 쿰파이(Cumpay)·비야 사모라노(Villa Zamorano)까지 세 브랜드를 만든다. 2024년 Cigar Journal 트로피 어워드에서 평생 공로상을 받았다. (출처: Wikipedia \"Maya Selva\" · Maya Selva Cigars 공식 사이트 · Cigar Journal)",
+    "keep": "",
+    "link": "https://www.mayaselvacigars.com/about-us",
+    "photo": "img/20261122-152659-IMG_7804.jpg",
+    "photos": [
+      "img/20261122-152659-IMG_7804.jpg",
+      "img/20261122-152703-IMG_9232.jpg"
+    ],
+    "photo_alt": "",
+    "updated": "2026-11-22T16:16",
+    "public": true
+  },
+  {
+    "no": 4,
+    "date": "2026-10-16",
+    "category": "행사",
+    "title": "피에르시가, 할리데이비슨 행사 HOG RALLY 참가",
+    "place": "Gangwon-do, Hoengseong-gun, Wellihillipark",
+    "lat": 37.487,
+    "lng": 128.248,
+    "note": "10월 16일, 강원도 횡성 웰리힐리파크에서 열린 할리데이비슨 H.O.G. 랠리에 갔다. 시가 부스를 맡아 현장에서 일했고, 내 인스타그램 스토리로 현장을 전했다. \n\n행사 정보 — H.O.G.(Harley Owners Group)는 할리데이비슨 오너들의 공식 모임이고, 랠리는 오너들이 한자리에 모여 함께 달리고 공연과 부스를 즐기는 축제다. (출처: 할리데이비슨 공식 사이트 H.O.G. 랠리 안내)",
+    "keep": "",
+    "link": "https://www.instagram.com/p/DeqYuaXE7XS/",
+    "photo": "img/20261122-154552-IMG_7967.jpg",
+    "photos": [
+      "img/20261122-154552-IMG_7967.jpg",
+      "img/20261122-154553-IMG_7972.jpg",
+      "img/20261122-154559-IMG_7933.jpg",
+      "img/20261122-154605-IMG_7932.jpg",
+      "img/20261122-154609-IMG_7931.jpg",
+      "img/20261122-154618-IMG_7928.jpg"
+    ],
+    "photo_alt": "",
+    "updated": "2026-11-22T15:55",
+    "public": true
+  },
+  {
+    "no": 5,
+    "date": "2026-09-22",
+    "category": "공간",
+    "title": "가을의 홍콩 여행",
+    "place": "Hong Kong, North Point, Hyatt Centric Victoria Harbour",
+    "lat": 22.292,
+    "lng": 114.2,
+    "note": "9월 22일부터 24일까지, 추석 연휴에 홍콩. 홍콩에 가면 늘 묵는 노스포인트의 하얏트 센트릭 빅토리아 하버에 머물렀다. 아침의 따뜻한 물과 바다 바람, 조용한 노천 공간, 세심한 어메니티에서 큰 행복을 느꼈다. 다음 날엔 한 시간쯤 걷고, 오전 수영과 정오까지 사우나로 시간을 보냈고, 저녁엔 그곳의 지인들을 만났다. 마지막 날 아침에도 수영을 하고 귀국했다.\n\n공간 정보 — 하얏트 센트릭 빅토리아 하버 홍콩(Hyatt Centric Victoria Harbour Hong Kong), 홍콩섬 노스포인트 1 North Point Estate Lane. 노스포인트 MTR역과 페리 선착장 바로 옆, 빅토리아 하버를 마주한 호텔이다. (출처: Hyatt 공식 사이트 · Discover Hong Kong)",
+    "keep": "",
+    "link": "https://www.hyatt.com/en-US/hotel/china/hyatt-centric-victoria-harbour-hong-kong/hkgct",
+    "photo": "img/20261122-155910-IMG_7325.jpg",
+    "photos": [
+      "img/20261122-155910-IMG_7325.jpg",
+      "img/20261122-155911-IMG_7324.jpg",
+      "img/20261122-155911-IMG_7323.jpg",
+      "img/20261122-155912-IMG_7322.jpg",
+      "img/20261122-155923-IMG_7321.jpg",
+      "img/20261122-155923-IMG_7320.jpg",
+      "img/20261122-155924-IMG_7319.jpg",
+      "img/20261122-155925-IMG_7318.jpg",
+      "img/20261122-155925-IMG_7317.jpg",
+      "img/20261122-155926-IMG_7316.jpg",
+      "img/20261122-155926-IMG_7315.jpg",
+      "img/20261122-155927-IMG_7314.jpg",
+      "img/20261122-155928-IMG_7313.jpg"
+    ],
+    "photo_alt": "심형일이찍은 사진 인스타 계정 @foto.porco",
+    "updated": "2026-11-22T16:15",
+    "public": true
+  }
+]

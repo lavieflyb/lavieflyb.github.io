@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>flyb · NARA</title>
+<meta name="description" content="와인과 시가, 공간과 행사 곁에서 일하는 NARA가 가 본 곳과 만난 사람을 모아 두는 기록.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css?v=20261122i">
+</head>
+<body>
+<header class="top">
+  <div class="wide row">
+    <a class="logo" href="index.html" title="바탕화면으로">flyb<span class="dot">.</span></a>
+    <nav><a href="#about">소개</a><a href="#inventory">기록</a><a href="#career">지나온 일</a><a href="#making">IN PROGRESS</a><a href="ai-system.html">내 AI 시스템</a></nav>
+  </div>
+</header>
+
+<!-- K384 구조: 왼쪽 소개 · 가운데 기록 · 오른쪽 이력과 IN PROGRESS -->
+<main class="k3 wide">
+  <aside class="col col-left" id="about">
+    <div class="stick">
+      <figure class="portrait"><img src="img/portrait.jpg" alt="NARA" onerror="this.parentNode.hidden=true"></figure>
+      <p class="kicker">flyb · NARA</p>
+      <p class="say">와인과 시가, 공간과 행사 곁에서 일해요.<br>가 본 곳과 만난 사람을 한 장씩 모아 둡니다.</p>
+      <p class="more">호텔과 레스토랑, 소믈리에와 와인 교육 현장에서 일을 시작했고, 프랑스에서 어학연수를 했어요. 와인 수입·통관·영업을 거쳐 지금은 와인·시가 브랜드의 운영과 행사를 맡고 있어요. 감각으로 발견한 취향을 구조로 설계해 경험으로 전달하는 사람이고 싶어요.</p>
+      <ul class="fields" aria-label="활동 영역">
+        <li><span class="tag">CURATOR</span>직접 경험한 것 중에 다시 고르고 싶은 것을 남겨요</li>
+        <li><span class="tag">PD</span>고르고 생활하는 장면을 숏폼으로, 지금 배우며 만들어요</li>
+        <li><span class="tag">WRITER</span>보고 먹고 머문 것들로 책을 준비하고 있어요</li>
+      </ul>
+      <div class="links" aria-label="바로가기">
+        <a href="https://www.instagram.com/naraflyb/" target="_blank" rel="noopener"><span class="tag">INSTAGRAM</span>@naraflyb</a>
+        <a href="https://www.instagram.com/lavieflyb/" target="_blank" rel="noopener"><span class="tag">REELS</span>@lavieflyb</a>
+        <a href="https://www.instagram.com/mco.works/" target="_blank" rel="noopener"><span class="tag">MCO</span>Maison Cave Oud · 공동 대표</a>
+      </div>
+    </div>
+  </aside>
+
+  <section class="col col-mid" id="inventory">
+    <div class="sechead">
+      <h2>INVENTORY</h2>
+      <p>날짜순 기록. 한 장마다 그때 고른 이유와 남은 기준을 적어요.</p>
+    </div>
+    <div class="invmap" id="invmap" hidden aria-label="기록한 곳 지도"></div>
+    <div class="filters" id="filters" role="tablist" aria-label="기록 종류"></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <aside class="col col-right">
+    <section id="career" class="block-r">
+      <div class="sechead"><h2>지나온 일</h2></div>
+      <ol class="career">
+        <li><b>2026–</b><span>MCO(Maison Cave Oud) 공동 대표 · 브랜딩·행사</span></li>
+        <li><b>2026</b><span>배우는 중 · 숏폼대행 2기, 나만의 AI 시스템 만들기 1기</span></li>
+        <li><b>2023–</b><span>신규 매장 오픈</span></li>
+        <li><b>2021–2025</b><span>와인 수입·통관·영업·납품</span></li>
+        <li><b>2020–</b><span>와인·시가 브랜드 운영 실무와 행사</span></li>
+        <li><b>2015</b><span>프랑스 어학연수</span></li>
+        <li><b>2006–2015</b><span>호텔·레스토랑 서비스, 소믈리에, 와인 교육 지원</span></li>
+      </ol>
+    </section>
+
+    <section id="making" class="block-r">
+      <div class="sechead"><h2>IN PROGRESS</h2></div>
+      <div class="making">
+        <article><span class="state on">쓰는 중</span><h3>숏폼 강의 영상 목차</h3><p>함께 듣는 수강생을 위해 강의 영상 몇 분 몇 초에 무슨 내용이 나오는지 정리한 페이지. 실제 목차는 수강생에게만 공유하고, 체험판은 예시 내용으로 보여 드려요.</p><a class="try" href="demo/shortform-toc/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a></article>
+        <article><span class="state on">쓰는 중</span><h3>배움 노트</h3><p>두 과정의 강의 회차, 실습, 영상 목차를 한 화면에서 보는 내 컴퓨터용 도구. 강의 자료와 과제가 들어 있어 나만 봐요.</p></article>
+        <article><span class="state">만드는 중</span><h3>인사 관리 앱</h3><p>직원이 카카오톡 채널 하나로 연차·스케줄·급여명세·계약을 묻고 처리하는 사내 인사 창구. 체험판의 회사·사람 이름과 금액은 모두 예시예요.</p><a class="try" href="demo/hr-desk/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a></article>
+        <article><span class="state plan">구상</span><h3>일주 다이어리</h3><p>지금 쓰는 일주별 다이어리를 앱으로. 생년월일을 넣으면 조심할 일주를 알려 주는 기능을 구상하고 있어요.</p></article>
+      </div>
+    </section>
+
+    <section class="ai" aria-label="내 AI 시스템">
+      <div>
+        <p class="kicker">버킷리스트 클럽 「나만의 AI 시스템 만들기」 1기</p>
+        <h2>내 기록을 읽는 AI 비서실장</h2>
+        <p>매번 처음부터 상황을 설명하지 않으려고, 내 기록을 읽고 내 방식대로 일하는 AI를 만들었어요. 무엇을 어떻게 만들었는지 정리했어요.</p>
+      </div>
+      <a class="btn" href="ai-system.html">내 AI 시스템 보기 →</a>
+    </section>
+  </aside>
+</main>
+
+<footer class="wide foot">
+  <span>© flyb · <a href="index.html">바탕화면으로</a></span>
+  <span id="updated"></span>
+</footer>
+
+<script>
+// 바탕화면 창 안에서 열릴 때(?only=about|inventory|career|making) 그 칸만 보여 준다
+(() => {
+  const only = new URLSearchParams(location.search).get("only");
+  const keep = only && document.getElementById(only);
+  if (!keep) return;
+  document.body.classList.add("embed");
+  document.querySelectorAll(".k3 > .col, .col-right > section").forEach(el => {
+    if (!(el === keep || el.contains(keep) || keep.contains(el))) el.hidden = true;
+  });
+})();
+</script>
+<script src="app.js?v=20261122i"></script>
+</body>
+</html>
