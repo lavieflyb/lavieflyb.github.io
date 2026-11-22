@@ -160,7 +160,11 @@ body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-
     win.hidden = false; shade.hidden = false; close.focus();
   };
   const shut = () => { win.hidden = true; shade.hidden = true; frame.src = "about:blank"; opener?.focus(); };
-  if (["127.0.0.1", "localhost"].includes(location.hostname)) document.querySelectorAll(".ic.mine").forEach(a => { a.href = "http://127.0.0.1:8799/"; a.title = "진짜 배움 노트 (내 컴퓨터에서만)"; });
+  // 내 노트북: 127.0.0.1로 열었거나 이 브라우저에서 한 번 ?me=1 로 열어 둔 경우 → 진짜 배움 노트
+  const MINE = (() => { try { const q = new URLSearchParams(location.search).get("me");
+    if (q === "1") localStorage.setItem("flyb-me", "1"); if (q === "0") localStorage.removeItem("flyb-me");
+    return ["127.0.0.1", "localhost"].includes(location.hostname) || localStorage.getItem("flyb-me") === "1"; } catch (_) { return ["127.0.0.1", "localhost"].includes(location.hostname); } })();
+  if (MINE) document.querySelectorAll(".ic.mine").forEach(a => { a.href = "http://127.0.0.1:8799/"; a.title = "진짜 배움 노트 (내 컴퓨터에서만)"; });
   document.querySelectorAll(".ic[data-win]").forEach(a => a.addEventListener("click", e => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault(); open(a);
