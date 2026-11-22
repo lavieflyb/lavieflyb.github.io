@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>체험판 · 일주 캘린더</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#F1EFE0;--paper:#FBFAF3;--ink:#36382B;--muted:#65684F;--line:#D8D6BF;--olive:#C4C99B;--wine:#8C4A55;
+  --serif:"Gowun Batang",serif;--sans:"Pretendard",system-ui,"Malgun Gothic",sans-serif;
+  --wood:#6F7F45;--fire:#B5523F;--earth:#A88447;--metal:#8E8C80;--water:#3E5A73}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px}
+.note{font-size:12px;color:var(--muted);margin:0 0 14px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:12px}
+.title{margin:0;font-family:var(--serif);font-weight:400;font-size:28px}
+.title small{font-size:14px;color:var(--wine);margin-left:8px;letter-spacing:.08em}
+/* 사람 */
+.people{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;align-items:stretch}
+.person{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 10px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--pc);border-radius:3px;font-size:13px}
+.person.off{opacity:.55}
+.person .show{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);cursor:pointer}
+.person .show input{accent-color:var(--pc);width:16px;height:16px}
+.person input[type=text]{width:72px;font:inherit;border:0;border-bottom:1px dashed var(--line);background:transparent;color:var(--ink);padding:2px 0}
+.person select,.person input.birth{font:inherit;font-size:12.5px;padding:3px 5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:3px}
+.person .gzp{font-family:var(--serif);font-size:18px;color:var(--pc);min-width:2.2em;text-align:center}
+.person .bd{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.person input.birth{width:110px}
+.person .leap{display:flex;align-items:center;gap:3px;font-size:12px;color:var(--muted)}
+.person .leap[hidden]{display:none}
+.person .pmsg{flex-basis:100%;font-size:11.5px;color:var(--muted)}
+.person button,.add{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:999px;padding:2px 9px;cursor:pointer}
+.person button:hover,.add:hover{border-color:var(--wine);color:var(--wine)}
+.add{align-self:center;padding:6px 14px;font-size:13px}
+.hint{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 10px}
+.bar h2{margin:0;font-family:var(--serif);font-weight:400;font-size:22px;text-align:center}
+.bar h2 span{display:block;font-size:13px;color:var(--muted)}
+.bar button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--paper);padding:4px 12px;border-radius:999px;cursor:pointer;color:var(--ink)}
+.bar button:hover{border-color:var(--wine);color:var(--wine)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.dow div{font-size:11px;letter-spacing:.1em;color:var(--muted);padding:6px 8px}
+.dow div:first-child{color:var(--wine)}
+.grid{border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cell{min-height:100px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);padding:6px 7px;display:flex;flex-direction:column;gap:2px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.cell.out{background:transparent;cursor:default}
+.cell:hover:not(.out){background:#fff}
+.cell.sel{outline:2px solid var(--wine);outline-offset:-2px}
+.cell.today .d{background:var(--ink);color:var(--bg);border-radius:999px;padding:0 6px}
+.cell:focus-visible{outline:2px solid var(--wine);outline-offset:-2px}
+.d{font-size:12px;color:var(--muted);align-self:flex-start;font-variant-numeric:tabular-nums}
+.gz{font-family:var(--serif);font-size:19px;line-height:1.2;display:flex;align-items:center;gap:5px}
+.gz i{width:6px;height:6px;border-radius:50%;display:inline-block;flex:none}
+.kr{font-size:11px;color:var(--muted)}
+.tags{display:flex;flex-direction:column;gap:2px;margin-top:auto}
+.prow{display:flex;flex-wrap:wrap;gap:2px;align-items:center}
+.pdot{width:4px;align-self:stretch;border-radius:2px;background:var(--pc);flex:none;margin-right:1px}
+.tag{font-size:10.5px;padding:0 5px;border-radius:3px;line-height:1.6;white-space:nowrap}
+.t-chung{background:var(--wine);color:#fff}
+.t-hap{background:var(--olive);color:var(--ink)}
+.t-hyung{border:1px solid var(--wine);color:var(--wine)}
+.t-same{background:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px;color:var(--muted);margin-top:12px;align-items:center}
+.panel{background:var(--paper);border:1px solid var(--line);padding:18px;position:sticky;top:16px}
+.panel h3{margin:0;font-family:var(--serif);font-weight:400;font-size:22px}
+.panel .sub{font-size:13px;color:var(--muted);margin:2px 0 10px}
+.panel h4{margin:14px 0 6px;font-family:var(--serif);font-weight:400;font-size:15px}
+.why{list-style:none;margin:0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:5px}
+.why li{padding-left:9px;border-left:3px solid var(--pc,var(--line))}
+.why li b{font-weight:600}
+.rule-box{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:8px 0;margin:14px 0 12px}
+.f{margin-bottom:10px}
+.f label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.1em;color:var(--wine)}
+.f label span{color:var(--muted);letter-spacing:0;font-size:12px}
+.f textarea::placeholder{color:#8C8A74;font-size:12.5px}
+.f textarea{width:100%;min-height:56px;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);padding:6px 8px;resize:vertical;color:var(--ink);border-radius:3px}
+.month-list ol{list-style:none;margin:0;padding:0;font-size:12.5px}
+.month-list li{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.month-list li b{font-weight:500;min-width:62px;color:var(--wine);font-variant-numeric:tabular-nums;flex:none}
+@media (max-width:900px){.layout{grid-template-columns:1fr}.panel{position:static}}
+@media (max-width:560px){.cell{min-height:74px;padding:4px}.gz{font-size:15px}.kr{display:none}.tag{font-size:9px;padding:0 3px}.title{font-size:23px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/korean-lunar-calendar@0.3.6/dist/korean-lunar-calendar.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <p class="note"><a href="../../archive.html#making" style="color:inherit">← flyb</a> · 체험판 · 만드는 중인 일주 다이어리 앱이에요. 이름·생년월일·적은 내용은 이 화면 안에서만 쓰고 저장하거나 어디에도 보내지 않아요(새로 고치면 처음으로).</p>
+
+  <header class="top">
+    <h1 class="title">일주 캘린더<small>DAILY PILLAR DIARY</small></h1>
+  </header>
+
+  <div class="people" id="people"></div>
+  <p class="hint">일주를 알면 목록에서 고르고, 모르면 '모름'으로 두고 양력·음력을 고른 뒤 생년월일을 넣어 '생년월일로 조회'를 눌러요. '달력에 표시'를 끄면 그 사람의 충·합 표시가 달력에서 잠시 빠져요. 최대 4명.</p>
+
+  <div class="bar">
+    <button id="prev" aria-label="이전 달">← 이전</button>
+    <h2 id="mtitle"></h2>
+    <button id="next" aria-label="다음 달">다음 →</button>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="dow"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span class="tag t-chung">충</span>부딪힘
+        <span class="tag t-hap">합</span>묶임
+        <span class="tag t-hyung">형</span>마찰
+        <span class="tag t-same">같음</span>같은 일주·지지
+        <span>· 왼쪽 세로줄 색 = 사람 · 점 색 = 그날 천간 오행 (<b style="color:var(--wood)">木</b> <b style="color:var(--fire)">火</b> <b style="color:var(--earth)">土</b> <b style="color:var(--metal)">金</b> <b style="color:var(--water)">水</b>)</span>
+      </div>
+    </div>
+
+    <aside class="panel" aria-live="polite">
+      <h3 id="pdate"></h3>
+      <p class="sub" id="psub"></p>
+      <ul class="why" id="pwhy"></ul>
+      <div id="pairs"></div>
+      <p class="rule-box">표시는 예측이 아니라 관찰 렌즈예요.<br>ACTUAL BEHAVIOR › REPEATED CHOICE › CAREER / LIFE EVIDENCE › INTERPRETATION › SAJU REFERENCE</p>
+      <div class="f"><label>PRE-SET LENS <span>그날 전에 · 오늘 무엇을 지켜볼지</span></label><textarea placeholder="오늘 어떤 장면을 눈여겨볼까요? 예: 사람과 부딪히는 순간이 오면 내가 어떻게 반응하는지"></textarea></div>
+      <div class="f"><label>FACT <span>실제로 있었던 일</span></label><textarea placeholder="오늘 실제로 무슨 일이 있었나요? 누가, 어디서, 무엇을 했는지 본 대로만 적어 보세요"></textarea></div>
+      <div class="f"><label>EMOTION <span>그때 든 감정</span></label><textarea placeholder="그 일이 있을 때 어떤 감정이 들었나요? 가장 강했던 감정 하나와 그 세기를 적어 보세요"></textarea></div>
+      <div class="f"><label>ACTION <span>내가 한 행동·선택</span></label><textarea placeholder="그래서 나는 무엇을 했나요? 말한 것, 고른 것, 하지 않기로 한 것도 좋아요"></textarea></div>
+      <div class="f"><label>CROSS-CHECK <span>그날 뒤에 · 렌즈와 맞춰 보기</span></label><textarea placeholder="아침에 정한 렌즈와 실제가 맞았나요? 아직 모르겠다면 '판단 보류'라고 적어도 돼요"></textarea></div>
+      <div class="f"><label>ONE LINE <span>오늘을 한 줄로</span></label><textarea placeholder="오늘을 한 문장으로 남긴다면?"></textarea></div>
+      <div class="month-list"><h4>이번 달 관찰할 날</h4><ol id="list"></ol></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const S="甲乙丙丁戊己庚辛壬癸", B="子丑寅卯辰巳午未申酉戌亥";
+const SK="갑을병정무기경신임계", BK="자축인묘진사오미신유술해";
+const EL=["wood","wood","fire","fire","earth","earth","metal","metal","water","water"];
+const JIE={1:5,2:4,3:5,4:5,5:5,6:6,7:7,8:7,9:7,10:8,11:7,12:7}; // 절입일 근사 (하루 차이 날 수 있음)
+const COLORS=["#8C4A55","#3E5A73","#6F7F45","#A88447"];
+
+function jdn(y,m,d){const a=Math.floor((14-m)/12),y2=y+4800-a,m2=m+12*a-3;
+  return d+Math.floor((153*m2+2)/5)+365*y2+Math.floor(y2/4)-Math.floor(y2/100)+Math.floor(y2/400)-32045}
+const dayIdx=(y,m,d)=>((jdn(y,m,d)+49)%60+60)%60;           // 0 = 甲子 (저널 9/17 甲午 · 9/19 丙申으로 확인)
+const gz=i=>S[i%10]+B[i%12], gzk=i=>SK[i%10]+BK[i%12];
+function monthPillar(y,m,d){
+  const br = d>=JIE[m] ? m%12 : (m+11)%12;
+  const sy = (m<2||(m===2&&d<JIE[2])) ? y-1 : y;
+  const ys=((sy-4)%10+10)%10, first=(ys*2+2)%10, from=(br-2+12)%12;
+  return S[(first+from)%10]+B[br];
+}
+// a = 기준(사람 일주), d = 비교 대상(그날 일진 또는 다른 사람 일주)
+function rel(d,a){
+  const ds=d%10, db=d%12, ms=a%10, mb=a%12, out=[];
+  if(d===a) out.push({c:"same",t:"같은 일주",w:`일주가 ${gz(a)}로 같아요`});
+  const sc=Math.abs(ds-ms)===6 && ![4,5].includes(ds) && ![4,5].includes(ms);
+  const bc=Math.abs(db-mb)===6;
+  if(sc&&bc) out.push({c:"chung",t:"천극지충",w:`일간 ${S[ms]}–${S[ds]}, 일지 ${B[mb]}–${B[db]} 모두 충`});
+  else{
+    if(sc) out.push({c:"chung",t:"간충",w:`일간 ${S[ms]}–${S[ds]} 충`});
+    if(bc) out.push({c:"chung",t:"지충",w:`일지 ${B[mb]}–${B[db]} 충`});
+  }
+  if((ds-ms+10)%10===5) out.push({c:"hap",t:"간합",w:`일간 ${S[ms]}–${S[ds]} 합`});
+  if((db+mb)%12===1) out.push({c:"hap",t:"지합",w:`일지 ${B[mb]}–${B[db]} 육합`});
+  const HY=[[0,3],[2,5],[5,8],[8,2],[1,10],[10,7],[7,1]];
+  if(HY.some(([x,y])=>(x===mb&&y===db)||(x===db&&y===mb)) || (mb===db&&[4,6,9,11].includes(mb)))
+    out.push({c:"hyung",t:"형",w:`일지 ${B[mb]}–${B[db]} 형`});
+  if(d!==a && db===mb && ![4,6,9,11].includes(mb)) out.push({c:"same",t:"같은지지",w:`일지가 ${B[mb]}로 같아요`});
+  return out;
+}
+
+let people=[{name:"나",idx:-1,on:true}]; // 공개 체험판: 처음엔 '모름', 생년월일로 조회
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pc=i=>COLORS[i%COLORS.length];
+
+function drawPeople(){
+  const box=$("people"); box.innerHTML="";
+  people.forEach((p,k)=>{
+    const el=document.createElement("div"); el.className="person"+(p.on?"":" off"); el.style.setProperty("--pc",pc(k));
+    const opts=`<option value="-1"${p.idx<0?" selected":""}>모름</option>`+Array.from({length:60},(_,i)=>`<option value="${i}"${i===p.idx?" selected":""}>${gz(i)} ${gzk(i)}</option>`).join("");
+    el.innerHTML=`<input type="text" value="${esc(p.name)}" aria-label="이름" maxlength="8">
+      <select aria-label="일주">${opts}</select>
+      <span class="bd"><select data-a="cal" aria-label="양력 음력"><option value="solar"${p.cal!=="lunar"?" selected":""}>양력</option><option value="lunar"${p.cal==="lunar"?" selected":""}>음력</option></select><input type="text" inputmode="numeric" class="birth" aria-label="생년월일" placeholder="1990-01-30" value="${esc(p.birth||"")}"><label class="leap"${p.cal==="lunar"?"":" hidden"}><input type="checkbox" data-a="leap"${p.leap?" checked":""}>윤달</label><button type="button" data-a="find">생년월일로 조회</button></span>
+      <span class="gzp">${p.idx<0?"?":gz(p.idx)}</span>${p.msg?`<span class="pmsg">${esc(p.msg)}</span>`:""}
+      <label class="show"><input type="checkbox" data-a="on" ${p.on?"checked":""}> 달력에 표시</label>
+      ${k?'<button type="button" data-a="del" aria-label="빼기">×</button>':""}`;
+    el.querySelector("input[type=text]").oninput=e=>{p.name=e.target.value||"?";render()};
+    el.querySelector("select").onchange=e=>{p.idx=+e.target.value;p.msg="";drawPeople();render()};
+    el.querySelector("input.birth").oninput=e=>{p.birth=e.target.value};
+    el.querySelector("input.birth").onkeydown=e=>{if(e.key==="Enter")el.querySelector('[data-a="find"]').click()};
+    el.querySelector('[data-a="cal"]').onchange=e=>{p.cal=e.target.value;p.msg="";drawPeople()};
+    el.querySelector('[data-a="leap"]').onchange=e=>{p.leap=e.target.checked};
+    el.querySelector('[data-a="find"]').onclick=()=>{
+      const v=el.querySelector("input.birth").value.trim(); p.birth=v;
+      if(!v){p.msg="생년월일을 먼저 넣어 주세요";drawPeople();return}
+      // 1990-01-30 · 1990.1.30 · 19900130 모두 받기 (음력은 2월 30일 같은 날도 있어 달력 입력 대신 글자로)
+      const mm=v.match(/^(\d{4})\D*?(\d{1,2})\D*?(\d{1,2})$/)||v.match(/^(\d{4})(\d{2})(\d{2})$/);
+      if(!mm){p.msg="생년월일은 1990-01-30처럼 적어 주세요";drawPeople();return}
+      let [y,m,d]=mm.slice(1).map(Number), label=`양력 ${y}.${m}.${d}`;
+      if(p.cal!=="lunar"){const t=new Date(y,m-1,d); if(t.getFullYear()!==y||t.getMonth()!==m-1||t.getDate()!==d){p.msg=`양력 ${y}.${m}.${d}은 없는 날짜예요`;drawPeople();return}}
+      if(p.cal==="lunar"){
+        if(!window.KoreanLunarCalendar){p.msg="음력 변환 도구를 불러오지 못했어요 (인터넷 연결 확인)";drawPeople();return}
+        const c=new KoreanLunarCalendar();
+        if(!c.setLunarDate(y,m,d,!!p.leap)){p.msg=`음력 ${y}.${m}.${d}${p.leap?"(윤달)":""}은 없는 날짜예요`;drawPeople();return}
+        const so=c.getSolarCalendar(); label=`음력 ${y}.${m}.${d}${p.leap?"(윤달)":""} = 양력 ${so.year}.${so.month}.${so.day}`;
+        [y,m,d]=[so.year,so.month,so.day];
+      }
+      p.idx=dayIdx(y,m,d);
+      p.msg=`${label}생 → ${gz(p.idx)}(${gzk(p.idx)}) 일주 · 밤 11시 이후 출생이면 하루 다를 수 있어요`; drawPeople();render()};
+    el.querySelector('[data-a="on"]').onchange=e=>{p.on=e.target.checked;drawPeople();render()};
+    const del=el.querySelector('[data-a="del"]'); if(del) del.onclick=()=>{people.splice(k,1);drawPeople();render()};
+    box.append(el);
+  });
+  if(people.length<4){const a=document.createElement("button");a.className="add";a.textContent="+ 사람 더하기";
+    a.onclick=()=>{people.push({name:"사람"+(people.length+1),idx:-1,on:true});drawPeople();render()};box.append(a)}
+}
+
+const now=new Date(); let Y=now.getFullYear(), M=now.getMonth()+1, sel=null;
+function render(){
+  const mid=Math.min(15,new Date(Y,M,0).getDate());
+  $("mtitle").innerHTML=`${Y}년 ${M}월<span>${monthPillar(Y,M,mid)}月 · ${JIE[M]}일 무렵 절입</span>`;
+  const first=new Date(Y,M-1,1).getDay(), days=new Date(Y,M,0).getDate();
+  const grid=$("grid"), list=$("list"); grid.innerHTML=""; list.innerHTML="";
+  const shown=people.map((p,k)=>({...p,k})).filter(p=>p.on&&p.idx>=0);
+  const unknown=people.filter(p=>p.on&&p.idx<0);
+  for(let i=0;i<first;i++){const c=document.createElement("div");c.className="cell out";grid.append(c)}
+  for(let d=1; d<=days; d++){
+    const i=dayIdx(Y,M,d), rows=shown.map(p=>({p,r:rel(i,p.idx)})).filter(x=>x.r.length);
+    const b=document.createElement("button"); b.className="cell";
+    if(Y===now.getFullYear()&&M===now.getMonth()+1&&d===now.getDate()) b.classList.add("today");
+    if(sel&&sel.y===Y&&sel.m===M&&sel.d===d) b.classList.add("sel");
+    b.innerHTML=`<span class="d">${d}</span><span class="gz"><i style="background:var(--${EL[i%10]})"></i>${gz(i)}</span><span class="kr">${gzk(i)}일</span>`+
+      `<span class="tags">${rows.map(x=>`<span class="prow" style="--pc:${pc(x.p.k)}"><span class="pdot"></span>${x.r.map(t=>`<span class="tag t-${t.c}">${t.t}</span>`).join("")}</span>`).join("")}</span>`;
+    b.setAttribute("aria-label",`${M}월 ${d}일 ${gzk(i)}일. `+rows.map(x=>`${x.p.name} ${x.r.map(t=>t.t).join(", ")}`).join(". "));
+    b.onclick=()=>{sel={y:Y,m:M,d};render()};
+    grid.append(b);
+    if(rows.length){const li=document.createElement("li");
+      li.innerHTML=`<b>${M}/${d} ${gz(i)}</b><span>${rows.map(x=>`<span style="color:${pc(x.p.k)}">${esc(x.p.name)}</span> ${x.r.map(t=>t.t).join("·")}`).join(" / ")}</span>`;
+      li.onclick=b.onclick; list.append(li)}
+  }
+  if(!list.children.length) list.innerHTML="<li>표시할 날이 없어요</li>";
+  const s = sel && sel.y===Y && sel.m===M ? sel : {y:Y,m:M,d:(Y===now.getFullYear()&&M===now.getMonth()+1)?now.getDate():1};
+  const i=dayIdx(s.y,s.m,s.d);
+  $("pdate").textContent=`${s.m}월 ${s.d}일 · ${gz(i)}日`;
+  $("psub").textContent=`${gzk(i)}일 · ${monthPillar(s.y,s.m,s.d)}月`;
+  $("pwhy").innerHTML = shown.length ? shown.map(p=>{const r=rel(i,p.idx);
+    return `<li style="--pc:${pc(p.k)}"><b>${esc(p.name)}</b> ${gz(p.idx)} — ${r.length? r.map(x=>`${x.t} (${x.w})`).join(", ") : "특별한 작용 없음"}</li>`}).join("")
+    : (unknown.length ? "" : "<li>달력에 표시한 사람이 없어요</li>");
+  $("pwhy").innerHTML += unknown.map(p=>`<li><b>${esc(p.name)}</b> 일주 모름 — 생년월일을 넣고 '생년월일로 조회'를 눌러 주세요</li>`).join("");
+  // 사람끼리
+  let pairs=[]; for(let a=0;a<shown.length;a++)for(let c=a+1;c<shown.length;c++){
+    const A=shown[a],C=shown[c],r=rel(C.idx,A.idx);
+    pairs.push(`<li><b>${esc(A.name)}</b> ${gz(A.idx)} × <b>${esc(C.name)}</b> ${gz(C.idx)} — ${r.length?r.map(x=>x.t).join(", "):"특별한 작용 없음"}</li>`)}
+  $("pairs").innerHTML = pairs.length ? `<h4>사람끼리 (일주 대 일주)</h4><ul class="why">${pairs.join("")}</ul>` : "";
+}
+$("prev").onclick=()=>{M--; if(M<1){M=12;Y--} render()};
+$("next").onclick=()=>{M++; if(M>12){M=1;Y++} render()};
+drawPeople(); render();
+</script>
+</body>
+</html>
