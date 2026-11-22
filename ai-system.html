@@ -26,6 +26,13 @@
 .tools h3{margin:6px 0 6px;font-family:var(--serif);font-weight:400;font-size:18px}
 .tools p{margin:0;font-size:14px;color:var(--muted)}
 .tools .who{font-family:var(--sans);font-size:11px;color:var(--muted)}
+.tools article{display:flex;flex-direction:column}
+.tools .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:10px}
+.tools .go{font-family:var(--sans);font-size:12.5px;padding:4px 12px;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none}
+.tools .go:hover{background:var(--wine)}
+.tools .go:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+.tools .go[hidden],.tools .go-note[hidden]{display:none}
+.tools .go-note{font-family:var(--sans);font-size:12px;color:var(--muted);align-self:center}
 .rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:62ch}
 .timeline{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
 .timeline div{padding:6px 0 12px 18px;position:relative}
@@ -68,12 +75,14 @@
   <section class="block">
     <h2>만든 도구</h2>
     <div class="tools">
-      <article><span class="who">내 컴퓨터</span><h3>배움 노트</h3><p>두 강의 과정의 회차, 실습, 과제를 한 화면에. 회차를 누르면 영상 몇 분 몇 초에 무슨 내용인지와 그때 쓴 슬라이드가 함께 나와요.</p></article>
-      <article><span class="who">수강생 공유</span><h3>숏폼 강의 영상 목차</h3><p>강의 녹화를 받아쓰고 강의실 영상 길이에 맞춰 시간 목차를 만들었어요. 함께 듣는 분들과 나눠요.</p></article>
-      <article><span class="who">내 컴퓨터 + 이 사이트</span><h3>flyb 관리 화면</h3><p>이 사이트의 INVENTORY를 채우는 어드민. 핸드폰으로 사진 여러 장과 한 줄을 넣고, 지도에 다녀온 곳을 찍고, 공개 전 확인 세 가지를 체크한 기록만 사이트로 내보내요. 사진의 위치 정보는 저장할 때 지워요.</p></article>
-      <article><span class="who">내 컴퓨터</span><h3>내 도구 모음</h3><p>내 컴퓨터에서 도는 관리 화면들을 한 페이지에서 보고, 꺼진 것을 바로 켜는 페이지. 어떤 게 공개 사이트를 고치는 어드민이고 어떤 게 나만 보는 화면인지 나눠 보여 줘요.</p></article>
-      <article><span class="who">내 컴퓨터</span><h3>MCO 사이트 문구 수정</h3><p>개인 사업 MCO 사이트의 글자를 화면에서 눌러 바로 고치는 도구. 저장하기 전 원본을 시간별로 남겨 둬요.</p></article>
-      <article><span class="who">내 컴퓨터 · 화면 비공개</span><h3>일 상황판</h3><p>메일, 일정, 오늘 할 일을 한 화면에 모아 아침마다 열어 보는 도구. 일과 관련된 기록이라 화면은 보여 드리지 않아요.</p></article>
+      <article><span class="who">내 컴퓨터</span><h3>배움 노트</h3><p>두 강의 과정의 회차, 실습, 과제를 한 화면에. 회차를 누르면 영상 몇 분 몇 초에 무슨 내용인지와 그때 쓴 슬라이드가 함께 나와요.</p><div class="links"><a class="go only-remote" href="demo/baeum-note/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a><a class="go only-local" href="http://127.0.0.1:8799/" target="_blank" rel="noopener" hidden>진짜 배움 노트 열기 ↗</a></div></article>
+      <article><span class="who">수강생 공유</span><h3>숏폼 강의 영상 목차</h3><p>강의 녹화를 받아쓰고 강의실 영상 길이에 맞춰 시간 목차를 만들었어요. 함께 듣는 분들과 나눠요.</p><div class="links"><a class="go" href="demo/shortform-toc/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a><span class="go-note only-remote">실제 목차는 수강생에게만 공유</span></div></article>
+      <article><span class="who">내 컴퓨터 + 이 사이트</span><h3>flyb 관리 화면</h3><p>이 사이트의 INVENTORY를 채우는 어드민. 핸드폰으로 사진 여러 장과 한 줄을 넣고, 지도에 다녀온 곳을 찍고, 공개 전 확인 세 가지를 체크한 기록만 사이트로 내보내요. 사진의 위치 정보는 저장할 때 지워요.</p><div class="links"><a class="go" href="archive.html#inventory" target="_blank" rel="noopener">결과 보기 · INVENTORY ↗</a><a class="go only-local" href="http://127.0.0.1:8803/" target="_blank" rel="noopener" hidden>관리 화면 열기 ↗</a></div></article>
+      <article><span class="who">내 컴퓨터</span><h3>내 도구 모음</h3><p>내 컴퓨터에서 도는 관리 화면들을 한 페이지에서 보고, 꺼진 것을 바로 켜는 페이지. 어떤 게 공개 사이트를 고치는 어드민이고 어떤 게 나만 보는 화면인지 나눠 보여 줘요.</p><div class="links"><a class="go only-local" href="http://127.0.0.1:8803/tools" target="_blank" rel="noopener" hidden>도구 모음 열기 ↗</a><span class="go-note only-remote">내 컴퓨터 전용 화면이에요</span></div></article>
+      <article><span class="who">내 컴퓨터</span><h3>MCO 사이트 문구 수정</h3><p>개인 사업 MCO 사이트의 글자를 화면에서 눌러 바로 고치는 도구. 저장하기 전 원본을 시간별로 남겨 둬요.</p><div class="links"><a class="go" href="https://www.instagram.com/mco.works/" target="_blank" rel="noopener">MCO 보기 ↗</a><a class="go only-local" href="http://127.0.0.1:8802/" target="_blank" rel="noopener" hidden>문구 수정 열기 ↗</a></div></article>
+      <article><span class="who">만드는 중 · 체험판 공개</span><h3>일주 캘린더</h3><p>생년월일(양력·음력)로 일주를 찾고, 여러 사람의 일주와 그날 일진의 충·합·형을 한 달력에 겹쳐 봐요. 날마다 관찰 렌즈와 실제 있었던 일을 나눠 적어요.</p><div class="links"><a class="go" href="demo/ilju-calendar/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a></div></article>
+      <article><span class="who">만드는 중 · 체험판 공개</span><h3>인사 창구 앱</h3><p>직원이 카카오톡 채널 하나로 연차·스케줄·급여명세·계약을 묻고 처리하는 사내 인사 창구. 체험판의 회사·사람 이름과 금액은 모두 예시예요.</p><div class="links"><a class="go" href="demo/hr-desk/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a></div></article>
+      <article><span class="who">내 컴퓨터 · 화면 비공개</span><h3>일 상황판</h3><p>메일, 일정, 오늘 할 일을 한 화면에 모아 아침마다 열어 보는 도구. 일과 관련된 기록이라 화면은 보여 드리지 않아요.</p><div class="links"><a class="go only-local" href="http://127.0.0.1:8800/" target="_blank" rel="noopener" hidden>상황판 열기 ↗</a><span class="go-note only-remote">회사 기록이라 화면은 비공개</span></div></article>
     </div>
   </section>
 
@@ -95,9 +104,9 @@
       <div><b>10.18</b>나의 재료 발굴하기 · 보관함 폴더</div>
       <div><b>10.25</b>비서실장 채용하기 · 지침과 상태 파일, 작업일지</div>
       <div><b>11.01</b>비서실장과 살아보기 · 2주 관찰</div>
-      <div><b>11.08</b>나만의 도구 만들기 · 배움 노트</div>
+      <div><b>11.08</b>나만의 도구 만들기 · <a href="demo/baeum-note/index.html" target="_blank" rel="noopener">배움 노트</a></div>
       <div><b>11.15</b>내 도구 나누기</div>
-      <div><b>11.22</b>집무실 짓기 · 어드민 + 사이트로 기록 아카이브(INVENTORY)를 만들어 이 주소로 공개</div>
+      <div><b>11.22</b>집무실 짓기 · 어드민 + 사이트로 기록 아카이브(<a href="archive.html#inventory">INVENTORY</a>)를 만들어 <a href="index.html">이 주소</a>로 공개</div>
     </div>
   </section>
 </main>
@@ -107,5 +116,12 @@
   <a href="index.html">처음으로</a>
 </footer>
 <script>if(new URLSearchParams(location.search).has("embed"))document.body.classList.add("embed")</script>
+<script>
+// 내 컴퓨터(127.0.0.1)에서 열면 진짜 도구 링크를 보여 주고, 다른 사람에게는 체험판·안내만
+if (["127.0.0.1", "localhost"].includes(location.hostname)) {
+  document.querySelectorAll(".only-local").forEach(a => a.hidden = false);
+  document.querySelectorAll(".only-remote").forEach(a => a.hidden = true);
+}
+</script>
 </body>
 </html>
