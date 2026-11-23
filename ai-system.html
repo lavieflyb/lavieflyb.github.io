@@ -39,6 +39,20 @@
 .timeline div::before{content:"";position:absolute;left:-6px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--wine)}
 .timeline b{font-family:var(--sans);font-weight:500;font-size:13px;color:var(--wine);margin-right:8px}
 @media (max-width:820px){.flow{grid-template-columns:1fr}.flow > div + div{border-left:0;border-top:1px solid var(--line)}.tools{grid-template-columns:1fr}}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;font-size:13.5px}
+.toc a{color:var(--wine);text-decoration:none;border-bottom:1px solid currentColor}
+.shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+
+.shots figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:8px}
+.shots img{width:100%;display:block;border-radius:2px}
+.shots figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+.changes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.changes > div{border-top:2px solid var(--ink);padding-top:10px}
+.changes h3{margin:0 0 6px;font-family:var(--serif);font-weight:400;font-size:17px}
+.changes p{margin:0;font-size:14px;color:var(--muted);word-break:keep-all}
+.timeline .soon{color:var(--muted)}
+.timeline .soon::before{background:var(--line)}
+@media (max-width:820px){.changes{grid-template-columns:1fr}.shots{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -54,6 +68,7 @@
     <p class="kicker">버킷리스트 클럽 「나만의 AI 시스템 만들기」 1기 · 2026.10–12</p>
     <h1>내 기록을 읽는<br>AI 비서실장</h1>
     <p class="lede">코딩을 배운 적 없이, 아홉 번의 모임 동안 내 기록을 모으고 지침을 쓰고 도구를 만들었어요.</p>
+    <nav class="toc" aria-label="이 페이지 순서"><a href="#made">1 · 만든 것</a><a href="#use">실제로 쓰는 모습</a><a href="#changed">2 · 달라진 것</a><a href="#next">3 · 앞으로</a></nav>
   </section>
 
   <section class="block">
@@ -72,7 +87,7 @@
     </div>
   </section>
 
-  <section class="block">
+  <section class="block" id="made">
     <h2>만든 도구</h2>
     <div class="tools">
       <article><span class="who">내 컴퓨터</span><h3>배움 노트</h3><p>두 강의 과정의 회차, 실습, 과제를 한 화면에. 회차를 누르면 영상 몇 분 몇 초에 무슨 내용인지와 그때 쓴 슬라이드가 함께 나와요.</p><div class="links"><a class="go only-remote" href="demo/baeum-note/index.html" target="_blank" rel="noopener">체험판 열기 ↗</a><a class="go only-local" href="http://127.0.0.1:8799/" target="_blank" rel="noopener" hidden>진짜 배움 노트 열기 ↗</a></div></article>
@@ -86,6 +101,40 @@
     </div>
   </section>
 
+  <section class="block" id="use">
+    <h2>실제로 쓰는 모습</h2>
+    <p class="problem">일과 개인 기록이 들어 있는 화면은 링크 대신 캡처로 보여 드려요. 이름·금액·일기 내용은 가렸어요.</p>
+    <div class="shots" id="shots">
+      <figure><img src="img/ai/use-1.png" alt="" onerror="this.parentNode.remove()"><figcaption>내 컴퓨터 화면 1</figcaption></figure>
+      <figure><img src="img/ai/use-2.png" alt="" onerror="this.parentNode.remove()"><figcaption>내 컴퓨터 화면 2</figcaption></figure>
+      <figure><img src="img/ai/use-3.png" alt="" onerror="this.parentNode.remove()"><figcaption>내 컴퓨터 화면 3</figcaption></figure>
+      <figure><img src="img/ai/use-4.png" alt="" onerror="this.parentNode.remove()"><figcaption>내 컴퓨터 화면 4</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="block" id="changed">
+    <h2>달라진 것</h2>
+    <div class="changes">
+      <div><h3>AI에게 설명하는 방식</h3><p>매번 내 상황을 처음부터 설명하던 것에서, AI가 지침(<code>CLAUDE.md</code>)과 프로젝트별 상태 파일 8개를 먼저 읽고 이어서 일해요.</p></div>
+      <div><h3>하루를 닫는 방식</h3><p>일을 마칠 때마다 작업일지에 남겨요. 10월 셋째 주부터 6주째 주마다 쌓이고 있고, 월요일엔 지난주를 돌아보며 이번 주를 정리해요.</p></div>
+      <div><h3>아침을 여는 방식</h3><p>10월 25일부터 아침마다 메일 브리핑을 받아 상황판 한 화면에서 오늘 할 일을 봐요. 지금까지 28번.</p></div>
+      <div><h3>배우는 방식</h3><p>강의 영상을 다시 뒤지는 대신, 몇 분 몇 초에 무엇이 나오는지 목차를 만들어 복습하고 같이 듣는 분들과 나눠요.</p></div>
+      <div><h3>기록하는 방식</h3><p>노션에 쓰던 일주 관찰 일기가 누구나 쓸 수 있는 일주 캘린더가 됐어요. 내 기록이 남을 위한 도구로 바뀐 첫 경험이에요.</p></div>
+      <div><h3>보여 주는 방식</h3><p>흩어져 있던 행사·사람·공간 기록을 핸드폰으로 넣고, 공개해도 되는 것만 골라 내 이름의 사이트에 쌓아요.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="next">
+    <h2>앞으로 어떻게 써 볼지</h2>
+    <ol class="rules">
+      <li><b>flyb 기록 쌓기</b> · 와인과 시가, 공간의 기록을 계속 넣고, 충분히 쌓이면 첫 화면을 와인 리스트처럼 바꿀 계획이에요.</li>
+      <li><b>일주 캘린더 다듬기</b> · 써 본 분들의 이야기를 듣고 불편한 곳부터 고쳐요. 기기 사이 이어 쓰기는 필요해지면 그때.</li>
+      <li><b>배움 노트 이어 쓰기</b> · 다음 강의도 같은 틀로 정리해요.</li>
+      <li><b>인사 창구 앱 마무리</b> · 회사 확인을 거쳐 실제로 쓰는 단계까지.</li>
+      <li><b>원칙은 그대로</b> · 되돌리기 어려운 일은 승인 뒤에, 공개 전엔 네 가지 점검.</li>
+    </ol>
+  </section>
+
   <section class="block">
     <h2>써 보며 더한 원칙</h2>
     <ol class="rules">
@@ -94,6 +143,8 @@
       <li>비밀번호와 인증 정보는 어떤 파일에도 적지 않아요.</li>
       <li>일과 개인 기록은 폴더와 상태 파일을 나눠요.</li>
       <li>첫 버전은 투박해도 괜찮아요. 자꾸 열어 보게 되면 성공이에요.</li>
+      <li>공개하기 전에 네 가지를 봐요. 키, 남의 개인정보, 사진 속 위치, 남의 글을 길게 옮긴 것.</li>
+      <li>남의 기록은 맡지 않아요. 누구나 쓰는 앱의 기록은 쓰는 사람의 기기에만 남겨요.</li>
     </ol>
   </section>
 
@@ -107,6 +158,9 @@
       <div><b>11.08</b>나만의 도구 만들기 · <a href="demo/baeum-note/index.html" target="_blank" rel="noopener">배움 노트</a></div>
       <div><b>11.15</b>내 도구 나누기</div>
       <div><b>11.22</b>집무실 짓기 · 어드민 + 사이트로 기록 아카이브(<a href="archive.html#inventory">INVENTORY</a>)를 만들어 <a href="index.html">이 주소</a>로 공개</div>
+      <div><b>11.23</b>일주 캘린더를 따로 떼어 <a href="/ilju-calendar/" target="_blank" rel="noopener">누구나 쓰는 앱</a>으로 공개</div>
+      <div class="soon"><b>11.29</b>각자 다듬기</div>
+      <div class="soon"><b>12.06</b>Demo Day · 만든 것, 달라진 것, 앞으로</div>
     </div>
   </section>
 </main>
@@ -116,6 +170,10 @@
   <a href="index.html">처음으로</a>
 </footer>
 <script>if(new URLSearchParams(location.search).has("embed"))document.body.classList.add("embed")</script>
+<script>
+// 캡처가 아직 없으면 '준비 중' 문구
+addEventListener("load", () => { const s = document.getElementById("shots"); if (s && !s.querySelector("figure")) s.innerHTML = '<p class="problem" style="margin:0">캡처를 준비하고 있어요.</p>'; });
+</script>
 <script>
 // 내 노트북(127.0.0.1로 열었거나, 이 브라우저에서 한 번 ?me=1 로 열어 둔 경우)이면 진짜 도구 링크를, 다른 사람에게는 체험판·안내만
 if ((() => { try { const q = new URLSearchParams(location.search).get("me");
