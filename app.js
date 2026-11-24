@@ -58,16 +58,20 @@ function drawMap(list){
   const has = e => e.lat !== "" && e.lat != null && e.lng !== "" && e.lng != null;
   if (!ENTRIES.some(has)) { box.hidden = true; return; }
   box.hidden = false;
-  // 같은 곳(장소 첫 단어가 같거나 0.3도 안쪽)은 점 하나로 묶고 'Hong Kong · 2'처럼 보여 준다
+  // 같은 곳(장소 첫 단어가 같거나 가까운 곳)은 점 하나로 묶고 'Hong Kong · 2'처럼 보여 준다
   const placeName = e => (e.place || "").split(",")[0].trim() || e.title;
   const key = n => n.toLowerCase().replace(/\s+/g, "");
   const groups = [];
   list.filter(has).forEach(e => {
-    const g = groups.find(g => g.key === key(placeName(e))) || groups.find(g => Math.abs(g.lat - e.lat) < .3 && Math.abs(g.lng - e.lng) < .3);
-    if (g) g.items.push(e); else groups.push({key: key(placeName(e)), name: placeName(e), lat: +e.lat, lng: +e.lng, items: [e]});
+    // 세계지도에서는 2도 안쪽(서울·강원, 홍콩·마카오처럼)이면 한 점으로 묶는다
+    const g = groups.find(g => g.key === key(placeName(e))) || groups.find(g => Math.abs(g.lat - e.lat) < 2 && Math.abs(g.lng - e.lng) < 2);
+    if (g) { g.items.push(e); if (!g.names.includes(placeName(e))) g.names.push(placeName(e)); }
+    else groups.push({key: key(placeName(e)), names: [placeName(e)], lat: +e.lat, lng: +e.lng, items: [e]});
   });
   // 가까운 무리끼리는 이름표를 위·아래로 나눠 겹치지 않게
-  groups.forEach((g, i) => { g.below = groups.slice(0, i).some(h => !h.below && Math.abs(h.lat - g.lat) < 6 && Math.abs(h.lng - g.lng) < 12); });
+  groups.forEach(g => { g.name = g.names.slice(0, 2).join(" · ") + (g.names.length > 2 ? " 외" : ""); });
+  // 바로 위(북쪽)에 다른 점이 있으면 이름표를 아래로 내려 겹치지 않게
+  groups.forEach(g => { g.below = groups.some(h => h !== g && h.lat > g.lat && h.lat - g.lat < 25 && Math.abs(h.lng - g.lng) < 15); });
   box.innerHTML = `<div class="world"><img src="vendor/world.svg?v=2" alt="" aria-hidden="true">${groups.map((g, gi) => {
       const x = (g.lng + 180) / 360 * 100, y = (84 - g.lat) / 144 * 100, n = g.items.length;
       const one = n === 1;
