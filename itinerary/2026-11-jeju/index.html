@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F1EFE0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="제주 일정">
+<title>제주 11.27–29 · ITINÉRAIRE</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* Layout: phone-first single column — day tabs, island route map, numbered timeline. Palette follows lavieflyb site. */
+:root{
+  --bg:#F1EFE0; --paper:#F8F7EE; --ink:#36382B; --muted:#65684F; --line:#D8D6BF;
+  --olive:#6E6A3A; --wine:#8C4A55; --wine-soft:#E4E6CC; --water:#E3E6D3; --land:#F8F7EE; --coast:#B9B79A;
+  --serif:"Gowun Batang","Noto Serif KR",serif; --sans:"Pretendard",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1B1C15; --paper:#23241C; --ink:#E9E7D5; --muted:#ADAC93; --line:#3A3B2F;
+  --olive:#CFC58A; --wine:#D899A2; --wine-soft:#33352A; --water:#202118; --land:#2C2D23; --coast:#4A4B3B; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:680px;margin:0 auto;padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(48px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--serif);font-size:1.9rem;margin:0;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--muted);font-size:.88rem}
+.tabs{display:flex;gap:6px;position:sticky;top:0;background:var(--bg);padding-block:8px;z-index:5;overflow-x:auto}
+.tabs button{flex:1 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 12px;font:inherit;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+.mapBox{background:var(--water);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mapBox svg{display:block;width:100%;height:auto}
+.cap{font-size:.76rem;color:var(--muted);margin-top:4px}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:1.5}
+.route{fill:none;stroke:var(--wine);stroke-width:3;stroke-dasharray:7 6;stroke-linecap:round}
+.mk circle{fill:var(--wine);stroke:var(--paper);stroke-width:2.5;cursor:pointer}
+.mk.done circle{fill:var(--muted)}
+.mk.approx circle{stroke-dasharray:3 2}
+.mk text{fill:var(--paper);font:600 15px var(--sans);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.mk .lbl{fill:var(--ink);font:500 13px var(--sans);text-anchor:start;paint-order:stroke;stroke:var(--water);stroke-width:4px;stroke-linejoin:round}
+.home path{fill:var(--olive);stroke:var(--paper);stroke-width:2}
+.home text{fill:var(--olive);font:600 12px var(--sans);paint-order:stroke;stroke:var(--water);stroke-width:4px}
+.stop{display:grid;grid-template-columns:28px 52px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.stop.flash{background:var(--wine-soft)}
+.num{width:24px;height:24px;border-radius:50%;background:var(--wine);color:var(--paper);font-size:.78rem;font-weight:600;display:grid;place-items:center;margin-top:1px}
+.num.off{background:transparent;color:var(--muted);border:1px dashed var(--line)}
+.stop.done .num{background:var(--muted)}
+.time{font-variant-numeric:tabular-nums;font-weight:600;color:var(--wine);padding-top:1px}
+.time.none{color:var(--muted);font-weight:400;font-size:.78rem}
+.body{min-width:0;display:flex;flex-direction:column;gap:4px}
+.titleRow{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.title{font-weight:600;font-size:1rem}
+.stop.done .title{text-decoration:line-through;color:var(--muted)}
+.chip{font-size:.72rem;padding:1px 8px;border-radius:999px;border:1px solid currentColor}
+.k-fixed{color:var(--ink)} .k-plan{color:var(--olive)} .k-option{color:var(--wine)} .k-check{color:var(--wine);background:var(--wine-soft);border-color:transparent}
+.place{color:var(--muted);font-size:.86rem;overflow-wrap:anywhere}
+.note{font-size:.88rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.acts a,.acts button{font:inherit;font-size:.8rem;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;text-decoration:none}
+.acts a{color:var(--wine)}
+.empty{color:var(--muted);padding:18px 0}
+.notes{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px}
+.notes h2{margin:0 0 8px;font-size:1rem}
+.notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.legend{display:flex;gap:6px;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
+@media (max-width:420px){.stop{grid-template-columns:26px 46px 1fr}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.top{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.top a{color:var(--muted);text-decoration:none}
+.after h2{margin:0 0 6px;font-size:1rem}
+.after p{margin:0;font-size:.88rem;color:var(--muted);word-break:keep-all}
+.after ul{margin:6px 0 0;padding:0;list-style:none}
+.after li{padding:8px 0;border-bottom:1px dotted var(--line)}
+.after li a{color:var(--ink);text-decoration:none;display:flex;gap:10px;align-items:baseline}
+.after li a span{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.after li a:hover b{color:var(--wine)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a href="../">← ITINÉRAIRE</a><span>여행</span></div>
+  <header>
+    <h1>제주 11.27 금 – 11.29 일</h1>
+    <p class="sub">2박 · 렌터카 · 보기 전용 일정표 (‘다녀옴’ 표시는 이 휴대폰에만 저장)</p>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <section>
+    <div class="mapBox"><svg id="map" viewBox="0 0 1000 592" role="img" aria-label="제주 섬 위 이 날의 이동 순서"></svg></div>
+    <div class="cap">번호 = 이동 순서 · 점선은 직선 연결(실제 도로 아님) · ★ 숙소 · 테두리 점선 핀 = 대략 위치</div>
+  </section>
+  <div class="legend"><span class="chip k-fixed">확정</span><span class="chip k-plan">계획</span><span class="chip k-option">빈 시간 후보</span><span class="chip k-check">확인 필요</span></div>
+  <section id="list" aria-live="polite"></section>
+  <section class="notes">
+    <h2>알아둘 것</h2>
+    <ul>
+      <li><b>숙소</b> 더 시에나 프리모 · 서귀포시 용흥로66번길 158-7 · 체크인 15:00 이후 / 체크아웃 11:00</li>
+      <li><b>렌터카</b> 특별한렌트카 · 11/27 15:30 ~ 11/29 08:30 · 셔틀은 공항 렌트카하우스 5구역 10번 · 본사 제주시 공항로1길 38 · <b>면허증 필수</b></li>
+      <li><b>제주아트센터</b> 공사로 주차장이 좁음. 차로 가면 16시 전후 도착</li>
+      <li><b>이동시간·운영시간</b> 대략값(추정)과 검색값입니다. 출발 전 지도 앱으로 확인</li>
+    </ul>
+  </section>
+  <section class="notes after" id="after">
+    <h2>다녀온 뒤 · INVENTORY</h2>
+    <p id="afterMsg">여행이 끝나면 남길 만한 곳을 골라 INVENTORY에 기록해요. 이 날짜(11.27–29)에 쓴 기록은 여기에 모여요.</p>
+    <ul id="afterList"></ul>
+  </section>
+</div>
+<script id="trip-data" type="application/json">[{"id": "fri-cat", "day": "pool", "time": "", "title": "제주캣월드", "place": "서귀포시 남원읍 태위로 485 (자료마다 483으로도 표기)", "kind": "option", "map": "제주캣월드", "note": "고양이 테마파크. 운영시간 못 찾음 — 확인 필요 (064-764-3100)\n금요일은 15:20 도착이라 어려움 → 날짜 미정 후보로 옮김. 숙소에서 약 35분(추정)", "lat": 33.2752, "lng": 126.699, "approx": false, "order": 2}, {"id": "fri-checkin", "day": "fri", "time": "17:00", "title": "체크인 · 더 시에나 프리모", "place": "서귀포시 용흥로66번길 158-7", "kind": "fixed", "map": "더 시에나 프리모", "note": "15:00부터 입실 가능. 렌터카 받고 16시쯤 출발 → 약 1시간(추정) · 디럭스 킹\n조식 인원 추가하면 오늘 22시 전에 (10% 할인)", "lat": 33.2665, "lng": 126.48, "approx": true, "order": 3}, {"id": "fri-dinner", "day": "fri", "time": "18:30", "title": "저녁 약속 · 리볼버 (확인 중)", "place": "서귀포시 예래로 31 (예래동, 검색 기준)", "kind": "check", "map": "리볼버 서귀포 예래로", "note": "11/26 '스누즈 대신 18:30 이후 리볼버' 제안 → 답변·예약 확인 필요\n스페인 타파스·내추럴 와인(리뷰 기준), 예약 가능. 영업시간 확인 못 함\n숙소에서 약 20~25분(추정) → 18:00쯤 출발\n차로 가면 돌아올 때 운전할 사람 정하기 (와인 자리)", "lat": 33.2428, "lng": 126.3783, "approx": false, "order": 4}, {"id": "fri-flight", "day": "fri", "time": "14:20", "title": "7C155 출발 → 15:20 제주 도착", "place": "제주국제공항", "kind": "fixed", "map": "제주국제공항", "note": "구글 캘린더 기준 14:20–15:20 (출발 공항은 캘린더에 없음)\n내리면 렌트카하우스 5구역 10번에서 셔틀", "lat": 33.5071, "lng": 126.4916, "approx": false, "order": 1}, {"id": "fri-rent", "day": "fri", "time": "15:30", "title": "렌터카 픽업 · 특별한렌트카", "place": "셔틀: 공항 렌트카하우스 5구역 10번 → 본사 제주시 공항로1길 38", "kind": "fixed", "map": "특별한렌트카 제주", "note": "예약 11/27 15:30 ~ 11/29 08:30\n면허증 필수 — 없으면 차량 인수 불가\n문의 064-805-8005", "lat": 33.5036, "lng": 126.5002, "approx": true, "order": 2}, {"id": "sat-alpaca", "day": "sat", "time": "14:15", "title": "도치돌알파카목장", "place": "제주시 애월읍 도치돌길 303", "kind": "plan", "map": "도치돌알파카목장", "note": "11월: 10:00~18:00, 입장마감 17:00 (자료마다 09:00~18:00 등 차이)\n기상 악화 시 휴장 가능 → 인스타 alpacalogpark 공지 확인\n안덕에서 약 35~40분(추정) · 여기서 아트센터까지 약 25~30분(추정) → 15:40 전후 출발", "lat": 33.4099, "lng": 126.3668, "approx": false, "order": 5}, {"id": "sat-bontae", "day": "sat", "time": "11:00", "title": "본태박물관", "place": "서귀포시 안덕면 산록남로762번길 69", "kind": "plan", "map": "본태박물관", "note": "관람 1시간 30분 정도 잡음. 운영시간·휴관일 검색으로 확인 못 함 → 확인 필요\n감귤밭에서 약 20분(추정)", "lat": 33.3039, "lng": 126.3925, "approx": false, "order": 3}, {"id": "sat-breakfast", "day": "sat", "time": "08:00", "title": "호텔 조식", "place": "더 시에나 프리모", "kind": "plan", "map": "", "note": "시간 예약 없이 운영시간 내 입장", "lat": 33.2665, "lng": 126.48, "approx": true, "order": 1}, {"id": "sat-dinner", "day": "sat", "time": "20:15", "title": "꺼멍목장 (흑돼지)", "place": "서귀포시 이어도로 338 (하원동)", "kind": "option", "map": "꺼멍목장", "note": "12:00~22:00 · 브레이크 15:00~16:30. 라스트오더 확인 필요\n아트센터→서귀포 약 1시간(추정). 공연이 늦게 끝나면 제주시에서 먹고 돌아오는 쪽이 나음", "lat": 33.2428, "lng": 126.4554, "approx": false, "order": 8}, {"id": "sat-maison", "day": "sat", "time": "12:45", "title": "메종 노트르테르 (커피·디저트)", "place": "서귀포시 안덕면 중산간서로1615번길 251-12", "kind": "plan", "map": "메종 노트르테르", "note": "프랑스인 바리스타 드립커피 카페(리뷰 기준). 영업시간 확인 필요\n본태박물관과 같은 안덕 중산간 — 가까움(추정)\n점심은 따로 정하지 않음: 여기서 가볍게 or 근처 식당 추가", "lat": 33.287, "lng": 126.335, "approx": true, "order": 4}, {"id": "sat-park", "day": "sat", "time": "16:15", "title": "제주아트센터 도착 · 주차", "place": "제주시 오남로 231", "kind": "check", "map": "제주아트센터", "note": "공사로 주차장이 좁아 택시·대중교통 권장 안내\n차로 가면 일찍 도착해서 자리 잡기. 대안: 근처에 세우고 택시 (근처 공영주차장 위치는 확인 못 함)\n문의 064-728-1509", "lat": 33.4752, "lng": 126.5155, "approx": false, "order": 6}, {"id": "sat-show", "day": "sat", "time": "17:00", "title": "보라 공연", "place": "제주아트센터", "kind": "fixed", "map": "제주아트센터", "note": "끝나는 시간 확인 필요 (저녁 동선이 여기에 달림)", "lat": 33.4752, "lng": 126.5155, "approx": false, "order": 7}, {"id": "sat-tangerine", "day": "sat", "time": "09:30", "title": "어린왕자감귤밭", "place": "서귀포시 대정읍 추사로36번길 45-1 (산방산 앞)", "kind": "plan", "map": "어린왕자감귤밭", "note": "09:30~20:00 연중무휴 (다른 자료는 21:00까지)\n음료 주문 시 동물 먹이주기 · 겨울 감귤따기는 일정 유동적 → 전화 확인 0507-1461-1605\n숙소에서 약 35분(추정)", "lat": 33.2527, "lng": 126.2807, "approx": true, "order": 2}, {"id": "sun-checkout", "day": "sun", "time": "06:40", "title": "체크아웃 (조식 어려움)", "place": "더 시에나 프리모", "kind": "plan", "map": "", "note": "09:25 비행기라 07시 전후 출발해야 함 → 조식 시작 시간 확인 필요, 어려우면 공항에서\n짐은 토요일 밤에 싸두기", "lat": 33.2665, "lng": 126.48, "approx": true, "order": 1}, {"id": "sun-flight", "day": "sun", "time": "09:25", "title": "이스타항공 09:25 → 10:25 도착", "place": "제주국제공항", "kind": "fixed", "map": "", "note": "구글 캘린더 기준 (편명은 캘린더에 없음)", "lat": 33.5071, "lng": 126.4916, "approx": false, "order": 4}, {"id": "sun-leave", "day": "sun", "time": "06:50", "title": "렌터카 반납하러 출발", "place": "숙소 → 특별한렌트카 (제주시 공항로1길 38)", "kind": "check", "map": "특별한렌트카 제주", "note": "숙소→렌터카 회사 약 55~60분(추정). 기름 채울 필요 있으면 10분 더", "lat": 33.5036, "lng": 126.5002, "approx": true, "order": 2}, {"id": "sun-return", "day": "sun", "time": "07:55", "title": "렌터카 반납 → 셔틀로 공항", "place": "특별한렌트카 본사 · 제주시 공항로1길 38", "kind": "fixed", "map": "특별한렌트카 제주", "note": "예약상 반납은 08:30까지지만 09:25 비행기라 08:00 전 반납 권장\n08:30에 반납하면 셔틀·수속 시간이 빠듯함", "lat": 33.5036, "lng": 126.5002, "approx": true, "order": 3}]</script>
+<script>
+const ITEMS=JSON.parse(document.getElementById("trip-data").textContent);
+const COAST="126.1606,33.2926;126.1828,33.2596;126.2021,33.2458;126.2284,33.2412;126.2494,33.2125;126.2473,33.2170;126.2504,33.2203;126.2565,33.2075;126.2631,33.2096;126.2618,33.1992;126.2699,33.1952;126.2842,33.2009;126.2945,33.1968;126.2902,33.2045;126.2951,33.2204;126.3261,33.2404;126.3354,33.2348;126.3270,33.2318;126.3618,33.2371;126.3694,33.2305;126.4112,33.2454;126.4326,33.2335;126.4573,33.2411;126.4627,33.2318;126.4835,33.2218;126.4948,33.2223;126.4795,33.2265;126.5145,33.2327;126.5209,33.2413;126.5597,33.2374;126.5592,33.2410;126.5614,33.2435;126.5673,33.2327;126.5716,33.2449;126.6081,33.2373;126.6196,33.2427;126.6229,33.2533;126.6402,33.2570;126.6421,33.2659;126.6609,33.2684;126.6580,33.2740;126.6642,33.2698;126.6598,33.2664;126.7334,33.2818;126.7430,33.2780;126.7775,33.3070;126.8044,33.3021;126.8304,33.3071;126.8481,33.3210;126.8469,33.3278;126.8368,33.3291;126.8592,33.3412;126.8708,33.3719;126.8830,33.3840;126.9060,33.3914;126.9029,33.4034;126.9197,33.4273;126.9160,33.4341;126.9243,33.4343;126.9232,33.4272;126.9296,33.4233;126.9351,33.4267;126.9223,33.4395;126.9254,33.4535;126.9344,33.4608;126.9415,33.4553;126.9469,33.4568;126.9363,33.4641;126.9359,33.4785;126.9358,33.4736;126.9350,33.4719;126.9245,33.4689;126.9276,33.4739;126.9277,33.4758;126.9205,33.4694;126.9117,33.4738;126.9141,33.4794;126.9019,33.4818;126.9137,33.4962;126.9122,33.5079;126.8994,33.5101;126.9041,33.5213;126.8807,33.5297;126.8585,33.5250;126.8581,33.5305;126.8411,33.5335;126.8282,33.5432;126.8268,33.5590;126.8141,33.5618;126.8077,33.5565;126.7981,33.5553;126.7838,33.5648;126.7653,33.5656;126.7617,33.5584;126.7403,33.5602;126.7388,33.5547;126.7367,33.5588;126.7411,33.5612;126.7298,33.5625;126.7167,33.5536;126.6840,33.5481;126.6783,33.5525;126.6671,33.5428;126.6442,33.5555;126.6327,33.5422;126.6346,33.5360;126.6277,33.5404;126.6261,33.5362;126.5974,33.5377;126.5832,33.5251;126.5621,33.5274;126.5516,33.5203;126.5448,33.5222;126.5535,33.5242;126.5415,33.5295;126.5428,33.5229;126.5330,33.5199;126.5411,33.5332;126.5309,33.5167;126.5301,33.5230;126.5164,33.5152;126.4940,33.5210;126.4828,33.5108;126.4648,33.5087;126.4661,33.5086;126.4672,33.5051;126.4638,33.5068;126.4646,33.5098;126.4636,33.5088;126.4630,33.5031;126.4536,33.5044;126.4525,33.4977;126.4370,33.4928;126.4272,33.4959;126.4005,33.4833;126.3856,33.4891;126.3381,33.4670;126.3207,33.4651;126.3296,33.4720;126.3248,33.4736;126.3205,33.4676;126.3122,33.4687;126.2997,33.4472;126.2619,33.4350;126.2642,33.4250;126.2590,33.4245;126.2604,33.4232;126.2585,33.4231;126.2572,33.4216;126.2576,33.4173;126.2518,33.4172;126.2517,33.4169;126.2577,33.4171;126.2606,33.4231;126.2629,33.4164;126.2530,33.4158;126.2569,33.4112;126.2501,33.4009;126.2340,33.3893;126.2219,33.3909;126.2133,33.3754;126.1805,33.3586;126.1787,33.3458;126.1663,33.3422;126.1616,33.3341;126.1675,33.2990;126.1606,33.2926";
+const HOME={lat:33.2665,lng:126.4800};
+const DAYS=[["fri","금 11/27"],["sat","토 11/28"],["sun","일 11/29"],["pool","후보"]];
+const KIND={fixed:"확정",plan:"계획",option:"빈 시간 후보",check:"확인 필요"};
+const LON0=126.13,LAT1=33.585,K=Math.cos(33.38*Math.PI/180),S=1000/((126.98-LON0)*K);
+const px=lng=>(lng-LON0)*K*S, py=lat=>(LAT1-lat)*S;
+const NS="http://www.w3.org/2000/svg";
+const $=id=>document.getElementById(id);
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const hasPos=i=>typeof i.lat==="number"&&typeof i.lng==="number";
+let done={},day="fri";
+try{done=JSON.parse(localStorage.getItem("itin-2026-11-jeju-done")||"{}")||{};}catch(e){done={};}
+try{const d=localStorage.getItem("itin-2026-11-jeju-day");if(d&&DAYS.some(x=>x[0]===d))day=d;else{const t=new Date();const m=t.getMonth()+1,dd=t.getDate();if(m===11&&dd===28)day="sat";if(m===11&&dd===29)day="sun";}}catch(e){}
+function saveDone(){try{localStorage.setItem("itin-2026-11-jeju-done",JSON.stringify(done));}catch(e){}}
+function rowsFor(){const key=i=>i.time||"99:99";return ITEMS.filter(i=>i.day===day).sort((a,b)=>key(a)<key(b)?-1:key(a)>key(b)?1:(a.order||0)-(b.order||0));}
+function tabs(){
+  const t=$("tabs");t.textContent="";
+  for(const [k,l] of DAYS){const n=ITEMS.filter(i=>i.day===k).length;if(!n&&k==="pool")continue;
+    const b=document.createElement("button");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",String(k===day));b.textContent=l+(n?` · ${n}`:"");
+    b.onclick=()=>{day=k;try{localStorage.setItem("itin-2026-11-jeju-day",k)}catch(e){};render();};t.appendChild(b);}
+}
+function drawMap(rows){
+  const svg=$("map");svg.textContent="";
+  svg.appendChild(el("polygon",{class:"land",points:COAST.split(";").map(p=>p.split(",").map(Number)).map(([lng,lat])=>`${px(lng).toFixed(1)},${py(lat).toFixed(1)}`).join(" ")}));
+  const hx=px(HOME.lng),hy=py(HOME.lat),h=el("g",{class:"home"}),st=[];
+  for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?5:11;st.push(`${(hx+r*Math.cos(a)).toFixed(1)},${(hy+r*Math.sin(a)).toFixed(1)}`);}
+  h.appendChild(el("path",{d:"M"+st.join("L")+"Z"}));const ht=el("text",{x:hx-14,y:hy+26});ht.textContent="숙소";h.appendChild(ht);svg.appendChild(h);
+  const on=rows.filter(hasPos);
+  if(on.length>1)svg.appendChild(el("polyline",{class:"route",points:on.map(i=>`${px(i.lng).toFixed(1)},${py(i.lat).toFixed(1)}`).join(" ")}));
+  const seen={};
+  on.forEach((it,idx)=>{
+    const x=px(it.lng),y=py(it.lat),kp=Math.round(x/14)+":"+Math.round(y/14),dup=seen[kp]||0;seen[kp]=dup+1;
+    const g=el("g",{class:"mk"+(done[it.id]?" done":"")+(it.approx?" approx":""),tabindex:"0",role:"button","aria-label":`${idx+1}. ${it.title||""}`});
+    g.appendChild(el("circle",{cx:x+dup*22,cy:y,r:13}));
+    const n=el("text",{x:x+dup*22,y});n.textContent=String(idx+1);g.appendChild(n);
+    if(!dup){const l=el("text",{x:x+18,y:y-14,class:"lbl"});l.textContent=(it.title||"").split(/[·(→]/)[0].trim().slice(0,12);g.appendChild(l);}
+    const go=()=>{const s=$("s-"+it.id);if(s){s.scrollIntoView({behavior:"smooth",block:"center"});s.classList.add("flash");setTimeout(()=>s.classList.remove("flash"),1200);}};
+    g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+    svg.appendChild(g);
+  });
+  return on;
+}
+function render(){
+  tabs();const rows=rowsFor(),on=drawMap(rows),list=$("list");list.textContent="";
+  if(!rows.length){const p=document.createElement("p");p.className="empty";p.textContent="이 날 일정이 없어요.";list.appendChild(p);return;}
+  for(const it of rows){
+    const s=document.createElement("article");s.className="stop"+(done[it.id]?" done":"");s.id="s-"+it.id;
+    const idx=on.indexOf(it),nm=document.createElement("div");nm.className="num"+(idx<0?" off":"");nm.textContent=idx<0?"·":String(idx+1);
+    const tm=document.createElement("div");tm.className="time"+(it.time?"":" none");tm.textContent=it.time||"시간 미정";
+    const b=document.createElement("div");b.className="body";
+    const tr=document.createElement("div");tr.className="titleRow";
+    const ti=document.createElement("span");ti.className="title";ti.textContent=it.title||"";
+    const ch=document.createElement("span");ch.className="chip k-"+(KIND[it.kind]?it.kind:"plan");ch.textContent=KIND[it.kind]||"계획";
+    tr.append(ti,ch);b.appendChild(tr);
+    if(it.place){const p=document.createElement("div");p.className="place";p.textContent=it.place;b.appendChild(p);}
+    if(it.note){const n=document.createElement("div");n.className="note";n.textContent=it.note;b.appendChild(n);}
+    const a=document.createElement("div");a.className="acts";
+    if(hasPos(it)){const k=document.createElement("a");k.href=`https://map.kakao.com/link/to/${encodeURIComponent(String(it.map||it.title||"목적지").replace(/,/g," "))},${it.lat},${it.lng}`;k.target="_blank";k.rel="noopener";k.textContent="카카오맵 길찾기";a.appendChild(k);}
+    if(it.map){const m=document.createElement("a");m.href="https://map.naver.com/p/search/"+encodeURIComponent(it.map);m.target="_blank";m.rel="noopener";m.textContent="네이버 지도";a.appendChild(m);}
+    const d=document.createElement("button");d.type="button";d.textContent=done[it.id]?"다녀옴 취소":"다녀옴";
+    d.onclick=()=>{if(done[it.id])delete done[it.id];else done[it.id]=1;saveDone();render();};a.appendChild(d);
+    b.appendChild(a);s.append(nm,tm,b);list.appendChild(s);
+  }
+}
+render();
+// 이 여행 날짜에 쓴 INVENTORY 기록을 아래에 모은다
+const TRIP={start:"2026-11-27",end:"2026-11-29"};
+fetch("../../data/entries.json",{cache:"no-store"}).then(r=>r.json()).then(list=>{
+  const inv=list.filter(x=>x.date>=TRIP.start&&x.date<=TRIP.end).sort((a,b)=>a.date<b.date?-1:1);
+  if(!inv.length)return;
+  $("afterMsg").textContent=`이 여행에서 남긴 기록 ${inv.length}개`;
+  for(const x of inv){const li=document.createElement("li"),a=document.createElement("a");
+    a.href="../../archive.html?only=inventory#inv-"+x.no;
+    const d=document.createElement("span");d.textContent=x.date.slice(5).replace("-",".");
+    const b=document.createElement("b");b.textContent=x.title||"";a.append(d,b);li.appendChild(a);$("afterList").appendChild(li);}
+}).catch(()=>{});
+</script>
+</body>
+</html>
