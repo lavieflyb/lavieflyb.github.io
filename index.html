@@ -103,6 +103,10 @@ body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-
     <a class="ic" href="/ilju-calendar/" target="_blank" rel="noopener">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FBFAF4"/><rect x="12" y="14" width="40" height="38" rx="4" fill="none" stroke="#36382B" stroke-width="3"/><path d="M12 24h40" stroke="#36382B" stroke-width="3"/><path d="M22 10v8M42 10v8" stroke="#36382B" stroke-width="3" stroke-linecap="round"/><text x="32" y="45" text-anchor="middle" font-family="'Gowun Batang',serif" font-size="17" font-weight="700" fill="#8C4A55">甲</text></svg>
       <span>일주 캘린더</span></a>
+    <!-- 일정표(ITINÉRAIRE): 내 기기(127.0.0.1 또는 ?me=1로 한 번 연 브라우저)에서만 보임 -->
+    <a class="ic only-me" href="itinerary/" hidden>
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#C4C99B"/><path d="M14 44c8-2 10-14 18-16s12 6 18-4" fill="none" stroke="#FBFAF4" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 7"/><circle cx="14" cy="44" r="4" fill="#36382B"/><path d="M50 14c-5 0-8 4-8 8 0 6 8 13 8 13s8-7 8-13c0-4-3-8-8-8z" fill="#8C4A55"/><circle cx="50" cy="22" r="3" fill="#FBFAF4"/></svg>
+      <span>일정</span></a>
   </nav>
 
   <p class="hint">앱을 눌러 열어 보세요 · <a href="archive.html">전체 보기</a></p>
@@ -164,6 +168,7 @@ body.home.has-photo{background:var(--sky2) url(img/desktop.jpg) center/cover no-
   const MINE = (() => { try { const q = new URLSearchParams(location.search).get("me");
     if (q === "1") localStorage.setItem("flyb-me", "1"); if (q === "0") localStorage.removeItem("flyb-me");
     return ["127.0.0.1", "localhost"].includes(location.hostname) || localStorage.getItem("flyb-me") === "1"; } catch (_) { return ["127.0.0.1", "localhost"].includes(location.hostname); } })();
+  if (MINE) document.querySelectorAll(".ic.only-me").forEach(a => { a.hidden = false; });
   if (MINE) document.querySelectorAll(".ic.mine").forEach(a => { a.href = "http://127.0.0.1:8799/"; a.title = "진짜 배움 노트 (내 컴퓨터에서만)"; });
   document.querySelectorAll(".ic[data-win]").forEach(a => a.addEventListener("click", e => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
