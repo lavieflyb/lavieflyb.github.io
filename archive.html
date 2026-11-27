@@ -14,7 +14,7 @@
 <header class="top">
   <div class="wide row">
     <a class="logo" href="index.html" title="바탕화면으로">flyb<span class="dot">.</span></a>
-    <nav><a href="#about">소개</a><a href="#inventory">기록</a><a href="#career">지나온 일</a><a href="#making">IN PROGRESS</a><a href="ai-system.html">내 AI 시스템</a><a class="only-me" href="itinerary/" hidden>ITINÉRAIRE</a></nav>
+    <nav><a href="#about">소개</a><a href="#inventory">기록</a><a href="#career">지나온 일</a><a href="#making">IN PROGRESS</a><a href="ai-system.html">내 AI 시스템</a></nav>
   </div>
 </header>
 
@@ -44,6 +44,11 @@
       <h2>INVENTORY</h2>
       <p>날짜순 기록. 한 장마다 그때 고른 이유와 남은 기준을 적어요.</p>
     </div>
+    <a class="itin only-me" href="itinerary/" hidden>
+      <span class="k">ITINÉRAIRE</span>
+      <span class="t" id="itinNext">여행·출장 일정표</span>
+      <span class="a">일정 보기 →</span>
+    </a>
     <div class="invmap" id="invmap" hidden aria-label="기록한 곳 지도"></div>
     <div class="filters" id="filters" role="tablist" aria-label="기록 종류"></div>
     <div class="cards" id="cards"></div>
@@ -101,12 +106,26 @@
   });
 })();
 </script>
-<style>.only-me[hidden]{display:none!important}</style>
+<style>.only-me[hidden]{display:none!important}
+.itin{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 14px;padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--wine);border-radius:8px;background:var(--paper);text-decoration:none;color:var(--ink);font-size:.9rem}
+.itin .k{font-size:.72rem;letter-spacing:.16em;color:var(--wine);font-weight:600}
+.itin .a{margin-left:auto;color:var(--muted);font-size:.82rem}
+.itin:hover .a{color:var(--wine)}</style>
 <script>
 // 일정표(ITINÉRAIRE) 링크: 내 기기(127.0.0.1 또는 바탕화면을 ?me=1로 한 번 연 브라우저)에서만 보임
 (() => { let me = ["127.0.0.1", "localhost"].includes(location.hostname);
   try { me = me || localStorage.getItem("flyb-me") === "1"; } catch (_) {}
-  if (me) document.querySelectorAll(".only-me").forEach(a => { a.hidden = false; }); })();
+  if (!me) return;
+  document.querySelectorAll(".only-me").forEach(a => { a.hidden = false; });
+  // 다가오는(또는 지금) 일정 하나를 한 줄로
+  fetch("itinerary/trips.json", { cache: "no-store" }).then(r => r.json()).then(list => {
+    const d = new Date(), today = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const t = list.filter(x => x.end >= today).sort((a, b) => a.start < b.start ? -1 : 1)[0];
+    if (!t) return;
+    const md = s => s.slice(5).replace("-", ".").replace(/^0/, "").replace(/\.0/, ".");
+    const now = t.start <= today;
+    document.getElementById("itinNext").textContent = `${now ? "지금" : "다음"} · ${t.title} ${md(t.start)}–${md(t.end)}`;
+  }).catch(() => {}); })();
 </script>
 <script src="app.js?v=20261124b"></script>
 </body>
