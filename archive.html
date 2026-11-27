@@ -14,7 +14,7 @@
 <header class="top">
   <div class="wide row">
     <a class="logo" href="index.html" title="바탕화면으로">flyb<span class="dot">.</span></a>
-    <nav><a href="#about">소개</a><a href="#inventory">기록</a><a href="#career">지나온 일</a><a href="#making">IN PROGRESS</a><a href="ai-system.html">내 AI 시스템</a></nav>
+    <nav><a href="#about">소개</a><a href="#inventory">기록</a><a href="#career">지나온 일</a><a href="#making">IN PROGRESS</a><a href="ai-system.html">내 AI 시스템</a><a class="only-me" href="itinerary/" hidden>ITINÉRAIRE</a></nav>
   </div>
 </header>
 
@@ -100,6 +100,13 @@
     if (!(el === keep || el.contains(keep) || keep.contains(el))) el.hidden = true;
   });
 })();
+</script>
+<style>.only-me[hidden]{display:none!important}</style>
+<script>
+// 일정표(ITINÉRAIRE) 링크: 내 기기(127.0.0.1 또는 바탕화면을 ?me=1로 한 번 연 브라우저)에서만 보임
+(() => { let me = ["127.0.0.1", "localhost"].includes(location.hostname);
+  try { me = me || localStorage.getItem("flyb-me") === "1"; } catch (_) {}
+  if (me) document.querySelectorAll(".only-me").forEach(a => { a.hidden = false; }); })();
 </script>
 <script src="app.js?v=20261124b"></script>
 </body>
